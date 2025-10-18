@@ -40,9 +40,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               ACADEMIX
               <div className="mt-[5px]">
                 <Image
-                  src={'/imgs/bgremoved-logo.png'}
+                  src={'/imgs/no-bg-logo.png'}
                   alt="img"
-                  width={65}
+                  width={50}
                   height={50}
                 />
               </div>

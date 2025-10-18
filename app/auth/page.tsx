@@ -96,7 +96,7 @@ const Login = () => {
 
       switch (user.role) {
         case 'super-admin':
-          router.push('/super-admin');
+          router.push('/super-admin/admin');
           break;
         case 'admin':
           router.push('/admin');
