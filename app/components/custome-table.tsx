@@ -12,13 +12,19 @@ import {
 } from '@/components/ui/table';
 import { usersT } from '../types/types';
 import { getAdmins } from '@/lib/get-admins';
-import { Skeleton } from '@/components/ui/skeleton';
 import TableSkeleton from './table-skeleton';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import DeleteAdmin from '../api/admin-api/delete-admin';
+import z from 'zod';
+import { toast } from 'sonner';
 
 const CustomeTable = () => {
   const [user, setUser] = useState<usersT[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,41 +59,69 @@ const CustomeTable = () => {
     });
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await DeleteAdmin(id);
+
+      if (res) {
+        setUser((el) => el.filter((del) => del.id !== id));
+        toast.success("Admin muvafaqqiyatli o'chirildi");
+      }
+    } catch (error) {
+      toast.error('Xatolik yuz berdi');
+    }
+  };
+
   return (
     <div className="w-full">
+      <Link href={'/super-admin/crud-pages/add-admin'}>
+        <Button variant={'outline'} className="w-[120px] mb-[20px]">
+          Admin Qo'shish
+        </Button>
+      </Link>
       <div className="block w-full  rounded-md border">
         <Table className="w-full min-w-[970px] border rounded-md">
           <TableHeader>
             <TableRow>
-              <TableHead>Rasm</TableHead>
-              <TableHead>Id</TableHead>
+              <TableHead className="pl-[20px]">Id</TableHead>
               <TableHead>Ism</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Telefon Raqam</TableHead>
               <TableHead>Yaratilgan sana</TableHead>
+              <TableHead>action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {user.map((item) => (
               <TableRow key={item.id}>
-                <TableCell>
-                  {item.img ? (
-                    <img
-                      className="w-10 h-10 rounded-full object-cover"
-                      src={item.img}
-                      alt="img"
-                    />
-                  ) : (
-                    <p className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-xs text-gray-500">
-                      N/A
-                    </p>
-                  )}
+                <TableCell className="w-[80px] pl-[20px]">{item.id}</TableCell>
+                <TableCell className="w-[80px]">{item.name}</TableCell>
+                <TableCell className="w-[80px]">{item.email}</TableCell>
+                <TableCell className="w-[80px]">{item.phoneNumber}</TableCell>
+                <TableCell className="w-[80px]">
+                  {formatData(item.createdAt)}
                 </TableCell>
-                <TableCell>{item.id}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.phoneNumber}</TableCell>
-                <TableCell>{formatData(item.createdAt)}</TableCell>
+                <TableCell className="w-[80px]">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onClick={() =>
+                        router.push(
+                          `/super-admin/crud-pages/edit-admin/${item.id}`
+                        )
+                      }
+                      className="w-[60px]"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={() => handleDelete(item.id)}
+                      className="w-[60px]"
+                      variant={'destructive'}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

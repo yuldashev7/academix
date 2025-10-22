@@ -176,11 +176,7 @@ const Login = () => {
                 />
               </label>
             </div>
-            <Button
-              className="w-full cursor-pointer"
-              type="submit"
-              disabled={loading}
-            >
+            <Button className="w-full" type="submit" disabled={loading}>
               {loading ? <Spinner /> : 'Kirish'}
             </Button>
           </form>

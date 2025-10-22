@@ -8,3 +8,20 @@ export interface usersT {
   totalCollected: string;
   phoneNumber: string;
 }
+
+export interface inputT extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  name: string;
+  type?: string;
+  placeholder?: string;
+  defaultValue?: string;
+  hidden?: boolean;
+}
+
+export interface postAdminT {
+  name: string;
+  password: string;
+  email: string;
+  phoneNumber: string;
+  role: string;
+}
