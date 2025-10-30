@@ -1,7 +1,7 @@
-const DeleteAdmin = async (id: string) => {
+const DeleteStudent = async (id: string) => {
   try {
     const res = await fetch(
-      `https://academix-server-1.onrender.com/admins/${id}`,
+      `https://academix-server-1.onrender.com/students/${id}`,
       {
         cache: 'no-store',
         method: 'DELETE',
@@ -9,7 +9,6 @@ const DeleteAdmin = async (id: string) => {
     );
     return res.ok;
   } catch (error) {}
-  return;
 };
 
-export default DeleteAdmin;
+export default DeleteStudent;

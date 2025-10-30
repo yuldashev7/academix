@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/ui/spinner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -120,7 +121,7 @@ const EditAdminPage = () => {
                   <FormControl>
                     <CustomeInput
                       label="Ism"
-                      placeholder="Ism kiriting"
+                      placeholder="Yangi ism kiriting"
                       {...field}
                     />
                   </FormControl>
@@ -136,7 +137,7 @@ const EditAdminPage = () => {
                   <FormControl>
                     <CustomeInput
                       label="Email"
-                      placeholder="Email kiriting"
+                      placeholder="Yangi email kiriting"
                       {...field}
                     />
                   </FormControl>
@@ -152,7 +153,7 @@ const EditAdminPage = () => {
                   <FormControl>
                     <CustomeInput
                       label="Telefon Raqam"
-                      placeholder="Telefon raqam kiriting"
+                      placeholder="Yangi Telefon raqam kiriting"
                       {...field}
                     />
                   </FormControl>
@@ -162,7 +163,7 @@ const EditAdminPage = () => {
             />
             <input type="hidden" value="admin" {...form.register('role')} />
             <Button type="submit" className="w-[120px]">
-              Yangilash
+              {loading ? <Spinner /> : 'Yangilash'}
             </Button>
           </form>
         </Form>

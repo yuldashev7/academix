@@ -1,6 +1,8 @@
 'use client';
-
+import PostTeacher from '@/app/api/teacher-api/post-teacher';
 import CustomeInput from '@/app/components/custome-input';
+import TableSkeleton from '@/app/components/table-skeleton';
+import { coureseT } from '@/app/types/types';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -9,16 +11,24 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import PostAdmin from '@/app/api/admin-api/post-admin';
-import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import z from 'zod';
+import { GetCourse } from '../get-course/get-course';
 import { Spinner } from '@/components/ui/spinner';
-import TableSkeleton from '@/app/components/table-skeleton';
 
 const formSchema = z.object({
   name: z.string().min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
@@ -34,9 +44,12 @@ const formSchema = z.object({
   password: z
     .string()
     .min(4, { message: "Parol kamida 4 ta belgi bo'lishi kerak" }),
+  courseId: z.string().min(1, 'Kurs tanlang'),
 });
-const AddAdmin = () => {
+
+const AddTeacher = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [courses, setCourses] = useState<coureseT[]>([]);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,39 +58,50 @@ const AddAdmin = () => {
       email: '',
       password: '',
       phoneNumber: '',
-      role: 'admin',
+      courseId: '',
+      role: 'teacher',
     },
   });
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const courseData = await GetCourse();
+        setCourses(courseData);
+      } catch (error) {
+        toast.error('Kurslarni olishda xatolik yuz berdi');
+      }
+    };
+    fetchCourses();
+  }, []);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      const res = await PostAdmin(values);
-      toast.success("Admin muvaffaqiyatli qo'shildi");
+      const res = await PostTeacher(values);
+      toast.success("Ustoz muvaffaqiyatli qo'shildi");
       form.reset();
-      router.push('/super-admin/admin');
+      router.push('/super-admin/teacher');
     } catch (error) {
-      if (error instanceof Error && error.message !== 'Duplicate email') {
-        toast.error("Admin qo'shishda xatolik yuz berdi");
+      if (error instanceof Error && error.message !== 'Dublicate email') {
+        toast.error("Ustoz qo'shishda xatolik yuz berdi");
       }
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div>
       <>
         <div>
-          <Link href={'/super-admin/admin'}>
-            <Button variant={'outline'} className="w-[120px] mb-[20px]">
-              Ortga Qaytish
-            </Button>
+          <Link href={'/super-admin/teacher'}>
+            <Button variant={'outline'}>Ortga Qaytish</Button>
           </Link>
 
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-[15px] shadow px-[20px] py-[20px] w-[960px] rounded-[10px]"
+              className="flex flex-col gap-[15px] shadow w-[960px] px-[20px] py-[20px] rounded-[10px] mt-[20px]"
             >
               <FormField
                 control={form.control}
@@ -95,6 +119,7 @@ const AddAdmin = () => {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="email"
@@ -103,7 +128,7 @@ const AddAdmin = () => {
                     <FormControl>
                       <CustomeInput
                         label="Email"
-                        placeholder="Email kiriting"
+                        placeholder="Email Kiriting"
                         {...field}
                       />
                     </FormControl>
@@ -111,7 +136,6 @@ const AddAdmin = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="password"
@@ -128,7 +152,6 @@ const AddAdmin = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="phoneNumber"
@@ -137,7 +160,7 @@ const AddAdmin = () => {
                     <FormControl>
                       <CustomeInput
                         label="Telefon Raqam"
-                        placeholder="Telefon Raqam kiriting"
+                        placeholder="Telefon raqam kiriting"
                         {...field}
                       />
                     </FormControl>
@@ -145,24 +168,37 @@ const AddAdmin = () => {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <CustomeInput
-                        label="role"
-                        hidden
-                        defaultValue="admin"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
+              <label>
+                Kurs
+                <FormField
+                  control={form.control}
+                  name="courseId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="w-[250px]">
+                          <SelectValue placeholder="Kurs Tanlang" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Kurslar</SelectLabel>
+                            {courses.map((item) => (
+                              <SelectItem key={item.id} value={String(item.id)}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </label>
+              <input type="hidden" value="teacher" {...form.register('role')} />
               <Button type="submit" className="w-[100px]">
                 {loading ? <Spinner /> : "Qo'shish"}
               </Button>
@@ -173,4 +209,4 @@ const AddAdmin = () => {
     </div>
   );
 };
-export default AddAdmin;
+export default AddTeacher;

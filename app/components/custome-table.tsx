@@ -17,13 +17,14 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import DeleteAdmin from '../api/admin-api/delete-admin';
-import z from 'zod';
 import { toast } from 'sonner';
+import { Spinner } from '@/components/ui/spinner';
 
 const CustomeTable = () => {
   const [user, setUser] = useState<usersT[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -61,14 +62,16 @@ const CustomeTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
+      setDeletingId(id);
       const res = await DeleteAdmin(id);
-
       if (res) {
         setUser((el) => el.filter((del) => del.id !== id));
         toast.success("Admin muvafaqqiyatli o'chirildi");
       }
     } catch (error) {
       toast.error('Xatolik yuz berdi');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -88,7 +91,7 @@ const CustomeTable = () => {
               <TableHead>Email</TableHead>
               <TableHead>Telefon Raqam</TableHead>
               <TableHead>Yaratilgan sana</TableHead>
-              <TableHead>action</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -118,7 +121,7 @@ const CustomeTable = () => {
                       className="w-[60px]"
                       variant={'destructive'}
                     >
-                      Delete
+                      {deletingId === item.id ? <Spinner /> : 'Delete'}
                     </Button>
                   </div>
                 </TableCell>

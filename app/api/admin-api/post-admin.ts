@@ -15,7 +15,7 @@ const PostAdmin = async (data: postAdminT) => {
     );
 
     if (existing) {
-      toast.error('Bu email bilan foydalanuvchi allaqachon mavjud');
+      toast.error('Bu email bilan foydalanuvchi allaqachon mavjud!');
       throw new Error('Duplicate email');
     }
 
