@@ -19,11 +19,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Spinner } from '@/components/ui/spinner';
 import { toast } from 'sonner';
-import { KeyRound, Mail } from 'lucide-react';
+import { Eye, EyeOff, KeyRound, Mail } from 'lucide-react';
 
 const formSchema = z.object({
   email: z
     .string()
+    .nonempty({ message: "Email bo'sh bo'lmasligi kerak" })
     .min(4, {
       message: 'Email kamida 4 ta belgi bolishi kerak',
     })
@@ -37,72 +38,50 @@ const Login = () => {
   const router = useRouter();
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowpassword] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   const handleLogin = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
       setError('');
-      const superAdminsRes = await fetch(
-        `https://academix-server-1.onrender.com/superAdmins`,
-        {
-          cache: 'no-store',
-        }
-      );
-      const superAdmins = await superAdminsRes.json();
 
-      const adminsRes = await fetch(
-        `https://academix-server-1.onrender.com/admins`,
-        {
-          cache: 'no-store',
-        }
-      );
-      const admins = await adminsRes.json();
+      const res = await fetch('http://localhost:3600/login', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
 
-      const teacherRes = await fetch(
-        'https://academix-server-1.onrender.com/teachers',
-        {
-          cache: 'no-store',
-        }
-      );
-      const teachers = await teacherRes.json();
-
-      const studentRes = await fetch(
-        'https://academix-server-1.onrender.com/students',
-        {
-          cache: 'no-store',
-        }
-      );
-      const students = await studentRes.json();
-
-      ///////////////////////////////////////////////////////////////////////////////////////
-
-      const allUsers = [...superAdmins, ...admins, ...teachers, ...students];
-
-      const user = allUsers.find(
-        (el: any) =>
-          el.email === values.email && el.password === values.password
-      );
-      if (!user) {
-        toast.error("Login yoki parol noto'g'ri");
-        setLoading(false);
+      if (!res.ok) {
+        toast.error('Email yoki parol noto‘g‘ri');
         return;
       }
-      toast.success('Tizimga muvaffaqiyatli kirdingiz');
-      document.cookie = `token=fakeToken;path=/`;
+      const data = await res.json();
+      const user = data.user;
+
+      document.cookie = `token=${data.accessToken};path=/`;
       document.cookie = `role=${user.role};path=/`;
+
+      toast.success('Tizimga muvaffaqiyatli kirdingiz');
 
       switch (user.role) {
         case 'super-admin':
           router.push('/super-admin/admin');
           break;
         case 'admin':
-          router.push('/admin');
+          router.push('/admin/teacher');
           break;
         case 'teacher':
-          router.push('/teacher');
+          router.push('/pages/teacher-page/student');
           break;
         case 'student':
           router.push('/student');
@@ -111,8 +90,7 @@ const Login = () => {
           setError("Nomalum ro'l");
       }
     } catch (error) {
-      setLoading(false);
-      console.log('error login', error);
+      console.log('Login error', error);
       setError('Xatolik yuz berdi, qayta urinib ko‘ring');
     } finally {
       setLoading(false);
@@ -138,9 +116,7 @@ const Login = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email</FormLabel>
-
                       <Mail className="w-[16px] absolute mt-[29px] ml-[10px]" />
-
                       <FormControl>
                         <Input
                           className="pl-[30px]"
@@ -161,14 +137,25 @@ const Login = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Parol </FormLabel>
+                      <FormLabel>Parol</FormLabel>
                       <KeyRound className="w-[16px] absolute mt-[29px] ml-[10px]" />
                       <FormControl>
-                        <Input
-                          className="pl-[30px]"
-                          placeholder="Parol kiriting"
-                          {...field}
-                        />
+                        <div className="relative">
+                          <Input
+                            className="pl-[30px]"
+                            placeholder="Parol kiriting"
+                            {...field}
+                            type={showPassword ? 'text' : 'password'}
+                          />
+                          <Button
+                            variant={'ghost'}
+                            type="button"
+                            onClick={() => setShowpassword(!showPassword)}
+                            className="absolute right-0 top-0"
+                          >
+                            {showPassword ? <Eye /> : <EyeOff />}
+                          </Button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -2,7 +2,7 @@ import { toast } from 'sonner';
 
 const GetStudent = async () => {
   try {
-    const res = await fetch('https://academix-server-1.onrender.com/students', {
+    const res = await fetch('http://localhost:3600/users', {
       cache: 'no-store',
     });
     if (!res.ok) {
@@ -11,7 +11,9 @@ const GetStudent = async () => {
     }
     const data = await res.json();
 
-    return data;
+    const students = data.filter((user: any) => user.role === 'student');
+
+    return students;
   } catch (error) {
     toast.error('Server bilan aloqa yo‘q');
     throw error;

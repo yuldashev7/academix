@@ -3,9 +3,7 @@ import { toast } from 'sonner';
 
 const PostStudent = async (data: postStudentT) => {
   try {
-    const checkRes = await fetch(
-      'https://academix-server-1.onrender.com/students'
-    );
+    const checkRes = await fetch('http://localhost:3600/users');
     const students = await checkRes.json();
 
     const existing = students.find(
@@ -20,10 +18,11 @@ const PostStudent = async (data: postStudentT) => {
 
     const newData = {
       ...data,
+      role: 'student',
       createdAt: new Date().toISOString(),
     };
 
-    const res = await fetch('https://academix-server-1.onrender.com/students', {
+    const res = await fetch('http://localhost:3600/users', {
       cache: 'no-store',
       method: 'POST',
       headers: { 'Content-type': 'application/json' },

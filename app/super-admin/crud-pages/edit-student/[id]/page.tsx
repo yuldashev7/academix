@@ -75,9 +75,7 @@ const EditStudentPage = () => {
     const fetchStudent = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `https://academix-server-1.onrender.com/students/${id}`
-        );
+        const res = await fetch(`http://localhost:3600/users/${id}`);
         const data = await res.json();
         form.reset({
           name: data.name || '',
@@ -85,7 +83,7 @@ const EditStudentPage = () => {
           phoneNumber: data.phoneNumber || '',
           courseId: data.courseId || '',
           paidAmount: data.paidAmount,
-          role: 'teacher',
+          role: 'student',
         });
 
         const fetchCourse = async () => {
@@ -108,7 +106,12 @@ const EditStudentPage = () => {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      const res = await EditStudent(id as string, values);
+      const cleanedValue = {
+        ...values,
+        paidAmount: values.paidAmount.replace(/\s/g, ''),
+      };
+
+      const res = await EditStudent(id as string, cleanedValue);
       toast.success("O'quvchi muvaffaqiyatli yangilandi");
       router.push('/super-admin/student');
     } catch (error) {

@@ -15,6 +15,7 @@ import { Users, LogOut, CrownIcon, GraduationCap } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 const sidebarItems = [
   { title: 'Adminlar', href: '/super-admin/admin', icon: CrownIcon },
@@ -29,6 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     document.cookie = `token=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
     document.cookie = `role=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
     router.push('/auth');
+    toast.success('Tizimdan muvafaqqiyatli chiqdingiz');
   };
 
   return (

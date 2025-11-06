@@ -68,9 +68,7 @@ const EditTeacherPage = () => {
     const fetchTeacher = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `https://academix-server-1.onrender.com/teachers/${id}`
-        );
+        const res = await fetch(`http://localhost:3600/users/${id}`);
         const data = await res.json();
 
         form.reset({

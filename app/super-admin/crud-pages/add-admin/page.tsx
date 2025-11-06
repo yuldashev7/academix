@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Spinner } from '@/components/ui/spinner';
 import TableSkeleton from '@/app/components/table-skeleton';
+import { Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
@@ -37,6 +38,7 @@ const formSchema = z.object({
 });
 const AddAdmin = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -118,11 +120,22 @@ const AddAdmin = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <CustomeInput
-                        label="Parol"
-                        placeholder="Parol kiriting"
-                        {...field}
-                      />
+                      <div className="relative">
+                        <CustomeInput
+                          label="Parol"
+                          placeholder="Parol kiriting"
+                          {...field}
+                          type={showPassword ? 'text' : 'password'}
+                        />
+                        <Button
+                          variant={'ghost'}
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-0 top-6"
+                        >
+                          {showPassword ? <Eye /> : <EyeOff />}
+                        </Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

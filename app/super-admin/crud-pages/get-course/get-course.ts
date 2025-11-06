@@ -1,7 +1,7 @@
 'use server';
 
 export const GetCourse = async () => {
-  const res = await fetch('https://academix-server-1.onrender.com/courses');
+  const res = await fetch('http://localhost:3600/courses');
   if (!res.ok) {
     throw new Error('Kurslarni olishda xatolik');
   }

@@ -1,12 +1,9 @@
-import React from 'react';
 import { postAdminT } from '../../types/types';
 import { toast } from 'sonner';
 
 const PostAdmin = async (data: postAdminT) => {
   try {
-    const checkRes = await fetch(
-      'https://academix-server-1.onrender.com/admins'
-    );
+    const checkRes = await fetch('http://localhost:3600/users');
     const admins = await checkRes.json();
 
     const existing = admins.find(
@@ -21,10 +18,11 @@ const PostAdmin = async (data: postAdminT) => {
 
     const newData = {
       ...data,
+      role: 'admin',
       createdAt: new Date().toISOString(),
     };
 
-    const res = await fetch('https://academix-server-1.onrender.com/admins', {
+    const res = await fetch('http://localhost:3600/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newData),

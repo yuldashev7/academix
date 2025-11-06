@@ -28,12 +28,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
+import { Eye, EyeOff } from 'lucide-react';
 
 const AddStudent = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourse] = useState<coureseT[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<coureseT | null>(null);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const formSchema = z.object({
     name: z
       .string()
@@ -176,11 +178,22 @@ const AddStudent = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <CustomeInput
-                    label="Parol"
-                    placeholder="Parol kiriting"
-                    {...field}
-                  />
+                  <div className="relative">
+                    <CustomeInput
+                      label="Parol"
+                      placeholder="Parol kiriting"
+                      {...field}
+                      type={showPassword ? 'text' : 'password'}
+                    />
+                    <Button
+                      variant={'ghost'}
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-0 top-6"
+                    >
+                      {showPassword ? <Eye /> : <EyeOff />}
+                    </Button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

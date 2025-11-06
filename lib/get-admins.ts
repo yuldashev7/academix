@@ -2,7 +2,7 @@ import { toast } from 'sonner';
 
 export const getAdmins = async () => {
   try {
-    const res = await fetch('https://academix-server-1.onrender.com/admins', {
+    const res = await fetch('http://localhost:3600/users', {
       cache: 'no-store',
     });
 
@@ -11,8 +11,9 @@ export const getAdmins = async () => {
       throw new Error('Fetch error');
     }
 
-    const data = await res.json();
-    return data;
+    const users = await res.json();
+    const admins = users.filter((user: any) => user.role === 'admin');
+    return admins;
   } catch (error) {
     toast.error('Server bilan aloqa yo‘q');
     throw error;

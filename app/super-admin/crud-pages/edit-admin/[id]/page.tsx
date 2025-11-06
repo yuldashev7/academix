@@ -53,9 +53,7 @@ const EditAdminPage = () => {
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const res = await fetch(
-          `https://academix-server-1.onrender.com/admins/${id}`
-        );
+        const res = await fetch(`http://localhost:3600/users/${id}`);
         const data = await res.json();
         form.reset({
           name: data.name || '',

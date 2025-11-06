@@ -95,9 +95,11 @@ const CustomeTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {user.map((item) => (
+            {user.map((item, index) => (
               <TableRow key={item.id}>
-                <TableCell className="w-[80px] pl-[20px]">{item.id}</TableCell>
+                <TableCell className="w-[80px] pl-[20px]">
+                  {index + 1}
+                </TableCell>
                 <TableCell className="w-[80px]">{item.name}</TableCell>
                 <TableCell className="w-[80px]">{item.email}</TableCell>
                 <TableCell className="w-[80px]">{item.phoneNumber}</TableCell>
@@ -112,16 +114,16 @@ const CustomeTable = () => {
                           `/super-admin/crud-pages/edit-admin/${item.id}`
                         )
                       }
-                      className="w-[60px]"
+                      className="w-[70px]"
                     >
-                      Edit
+                      Tahrirlash
                     </Button>
                     <Button
                       onClick={() => handleDelete(item.id)}
-                      className="w-[60px]"
+                      className="w-[70px]"
                       variant={'destructive'}
                     >
-                      {deletingId === item.id ? <Spinner /> : 'Delete'}
+                      {deletingId === item.id ? <Spinner /> : "O'chirish"}
                     </Button>
                   </div>
                 </TableCell>

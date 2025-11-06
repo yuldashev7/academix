@@ -107,9 +107,9 @@ const Teacher = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {user.map((item) => (
+            {user.map((item, index) => (
               <TableRow key={item.id}>
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.phoneNumber}</TableCell>
@@ -123,16 +123,16 @@ const Teacher = () => {
                           `/super-admin/crud-pages/edit-teacher/${item.id}`
                         )
                       }
-                      className="w-[60px]"
+                      className="w-[70px]"
                     >
-                      Edit
+                      Tahrirlash
                     </Button>
                     <Button
-                      className="w-[60px]"
+                      className="w-[70px]"
                       variant={'destructive'}
                       onClick={() => handleDelete(item.id)}
                     >
-                      {deletingId === item.id ? <Spinner /> : 'Delete'}
+                      {deletingId === item.id ? <Spinner /> : "O'chirish"}
                     </Button>
                   </div>
                 </TableCell>

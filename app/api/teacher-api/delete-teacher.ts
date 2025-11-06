@@ -1,12 +1,9 @@
 const DeleteTeacher = async (id: string) => {
   try {
-    const res = await fetch(
-      `https://academix-server-1.onrender.com/teachers/${id}`,
-      {
-        cache: 'no-store',
-        method: 'DELETE',
-      }
-    );
+    const res = await fetch(`http://localhost:3600/users/${id}`, {
+      cache: 'no-store',
+      method: 'DELETE',
+    });
     return res.ok;
   } catch (error) {}
 };

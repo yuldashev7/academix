@@ -120,9 +120,9 @@ export default function Student() {
             </TableHeader>
 
             <TableBody>
-              {user.map((item) => (
+              {user.map((item, index) => (
                 <TableRow key={item.id}>
-                  <TableCell className="text-center">{item.id}</TableCell>
+                  <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell className="text-center">{item.name}</TableCell>
                   <TableCell className="text-center">{item.email}</TableCell>
                   <TableCell className="text-center">
@@ -155,16 +155,16 @@ export default function Student() {
                             `/super-admin/crud-pages/edit-student/${item.id}`
                           )
                         }
-                        className="w-[60px]"
+                        className="w-[70px]"
                       >
-                        Edit
+                        Tahrirlash
                       </Button>
                       <Button
                         onClick={() => handleDelete(item.id)}
                         className="w-[60px]"
                         variant={'destructive'}
                       >
-                        {deletingId === item.id ? <Spinner /> : 'Delete'}
+                        {deletingId === item.id ? <Spinner /> : "O'chirish"}
                       </Button>
                     </div>
                   </TableCell>
