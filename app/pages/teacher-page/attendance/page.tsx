@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import UseGetCookie from '@/hooks/use-get-cookie';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -30,12 +31,20 @@ const Attendance = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
+        const teacherId = UseGetCookie('userId');
         const t = await GetTeacher();
         const c = await GetCourse();
         const s = await GetStudent();
-        setTeacher(t[0]);
+
+        const filtredStudent = s.filter(
+          (st: any) => String(st.teacherId) === String(teacherId)
+        );
+
+        setTeacher(
+          t.find((t: any) => String(t.id) === String(teacherId) || null)
+        );
         setCourses(c);
-        setStudent(s);
+        setStudent(filtredStudent);
 
         const savedAttendance = localStorage.getItem('attendance');
         if (savedAttendance) {

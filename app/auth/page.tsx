@@ -70,6 +70,7 @@ const Login = () => {
 
       document.cookie = `token=${data.accessToken};path=/`;
       document.cookie = `role=${user.role};path=/`;
+      document.cookie = `userId=${user.id};path=/`;
 
       toast.success('Tizimga muvaffaqiyatli kirdingiz');
 

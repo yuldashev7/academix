@@ -62,7 +62,9 @@ export interface studentT {
   password: string;
   phoneNumber: string;
   createdAt: string;
-  courseId: string;
+  courseId: number;
+  groupId: number;
+  teacherId: number;
   paidAmount: number;
   totalFee: number;
   role: 'student';
@@ -87,4 +89,17 @@ export interface postStudentT {
   courseId: string;
   paidAmount: number;
   role: string;
+}
+
+export interface groupT {
+  id: number;
+  name: string;
+  courseId: number;
+  teacherId: number;
+}
+
+export interface postGroupT {
+  name: string;
+  courseId: number;
+  teacherId: number;
 }

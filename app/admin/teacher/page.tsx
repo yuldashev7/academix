@@ -89,10 +89,13 @@ const Teacher = () => {
   return (
     <div className="w-full">
       <Link href={'/admin/crud-pages/add-teacher'}>
-        <Button variant={'outline'} className="w-[120px] mb-[20px]">
+        <Button variant={'outline'} className="w-[120px] mb-[10px]">
           Ustoz Qo'shish
         </Button>
       </Link>
+      <h1 className="mb-[20px] text-center font-medium text-[20px] text-gray-800">
+        Ustozlar
+      </h1>
       <div className="block w-full  rounded-md border">
         <Table className="w-full min-w-[970px] border rounded-md">
           <TableHeader>

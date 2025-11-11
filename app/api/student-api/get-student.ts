@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 
-const GetStudent = async () => {
+const GetStudent = async (teacherId?: string) => {
   try {
     const res = await fetch('http://localhost:3600/users', {
       cache: 'no-store',
@@ -12,6 +12,10 @@ const GetStudent = async () => {
     const data = await res.json();
 
     const students = data.filter((user: any) => user.role === 'student');
+
+    if (teacherId) {
+      return students.filter((t: any) => String(t.teacherId) === teacherId);
+    }
 
     return students;
   } catch (error) {

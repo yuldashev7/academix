@@ -1,6 +1,6 @@
 'use client';
 import GetStudent from '@/app/api/student-api/get-student';
-import { coureseT, studentT } from '@/app/types/types';
+import { coureseT, groupT, studentT, teachersT } from '@/app/types/types';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -19,11 +19,16 @@ import DeleteStudent from '@/app/api/student-api/delete-student';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
+import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import GetGroup from '@/app/api/group-api/get-group';
+import UseGetCookie from '@/hooks/use-get-cookie';
 
 export default function Student() {
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<studentT[]>([]);
   const [course, setCourse] = useState<coureseT[]>([]);
+  const [getTeacher, setGetTeacher] = useState<teachersT[]>([]);
+  const [selectedGroup, setSelectedGropu] = useState<groupT[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -31,14 +36,31 @@ export default function Student() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const [studentData, courseData] = await Promise.all([
-          GetStudent(),
-          GetCourse(),
-        ]);
-        setUser(studentData);
-        setCourse(courseData);
+        const teacherId = UseGetCookie('userId') ?? undefined;
+        console.log('teacherId', teacherId);
+        const students = await GetStudent();
+        console.log('Fetched students:', students);
+        setUser(
+          students.map((s: any) => ({
+            ...s,
+            courseId: Number(s.courseId),
+            groupId: Number(s.groupId),
+            teacherId: s.teacherId ? Number(s.teacherId) : null,
+          }))
+        );
+        console.log('Student data:', students);
+
+        const courses = await GetCourse();
+        setCourse(courses);
+
+        const teachers = await GetTeacher();
+        setGetTeacher(teachers);
+        console.log('Teachers:', teachers);
+
+        const groups = await GetGroup();
+        setSelectedGropu(groups);
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -63,13 +85,23 @@ export default function Student() {
     });
   };
 
-  const getCourseName = (id: string) => {
-    const courses = course.find((el) => String(el.id) === id);
+  const getGroupName = (id: number) => {
+    const group = selectedGroup.find((g) => g.id === id);
+    return group ? group.name : 'Guruh topilmadi';
+  };
+
+  const getTeacherName = (id: number | string | null | undefined) => {
+    const teacher = getTeacher.find((t) => String(t.id) === String(id));
+    return teacher ? teacher.name : 'Ustoz topilmadi';
+  };
+
+  const getCourseName = (id: number) => {
+    const courses = course.find((el) => Number(el.id) === Number(id));
     return courses ? courses.name : 'Kurs topilmadi';
   };
 
-  const getCoursePrice = (id: string) => {
-    const found = course.find((c) => String(c.id) === id);
+  const getCoursePrice = (id: number) => {
+    const found = course.find((c) => Number(c.id) === Number(id));
     return found ? `${Number(found.price).toLocaleString()} UZS` : 'Topilmadi';
   };
 
@@ -101,7 +133,9 @@ export default function Student() {
           O‘quvchi qo‘shish
         </Button>
       </Link>
-
+      <h1 className="mb-[20px] mt-[10px] text-center font-medium text-[20px] text-gray-800">
+        O'quvchilar
+      </h1>
       <div className="w-full overflow-x-auto mt-5">
         <div className="border rounded-md">
           <Table className="text-sm">
@@ -113,6 +147,8 @@ export default function Student() {
                 <TableHead className="text-center">Telefon</TableHead>
                 <TableHead className="text-center">Sana</TableHead>
                 <TableHead className="text-center">O‘qiyotgan kurs</TableHead>
+                <TableHead className="text-center">O‘qiyotgan guruhi</TableHead>
+                <TableHead className="text-center">O‘qituvchisi</TableHead>
                 <TableHead className="text-center">To‘lagan</TableHead>
                 <TableHead className="text-center">Umumiy narx</TableHead>
                 <TableHead className="text-center w-[160px]">Action</TableHead>
@@ -133,6 +169,12 @@ export default function Student() {
                   </TableCell>
                   <TableCell className="text-center">
                     {getCourseName(item.courseId)}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getGroupName(item.groupId)}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {getTeacherName(item.teacherId)}
                   </TableCell>
                   <TableCell className="text-center">
                     {formatPrice(item.paidAmount)} UZS

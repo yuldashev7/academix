@@ -11,7 +11,7 @@ import {
   SidebarFooter,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Users, LogOut, CrownIcon, GraduationCap } from 'lucide-react';
+import { Users, LogOut, GraduationCap, Code2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 const sidebarItems = [
   { title: 'Ustozlar', href: '/admin/teacher', icon: GraduationCap },
   { title: "O'quvchilar", href: '/admin/student', icon: Users },
+  { title: 'Barcha kurslar', href: '/admin/all-courses', icon: Code2 },
 ];
 
 export default function AdminLayout({

@@ -2,6 +2,7 @@
 import GetStudent from '@/app/api/student-api/get-student';
 import { coureseT, studentT } from '@/app/types/types';
 import { Button } from '@/components/ui/button';
+
 import {
   Table,
   TableBody,
@@ -19,6 +20,7 @@ import DeleteStudent from '@/app/api/student-api/delete-student';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
+import UseGetCookie from '@/hooks/use-get-cookie';
 
 export default function Student() {
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +39,17 @@ export default function Student() {
           GetStudent(),
           GetCourse(),
         ]);
-        setUser(studentData);
+
+        const teacherId = UseGetCookie('userId');
+
+        const filtredStudent = studentData
+          .filter((s: any) => String(s.teacherId) === String(teacherId))
+          .map((s: any) => ({
+            ...s,
+            courseId: Number(s.courseId),
+          }));
+
+        setUser(filtredStudent);
         setCourse(courseData);
       } catch (error: any) {
         setError(error.message);
@@ -63,13 +75,13 @@ export default function Student() {
     });
   };
 
-  const getCourseName = (id: string) => {
-    const courses = course.find((el) => String(el.id) === id);
+  const getCourseName = (id: number) => {
+    const courses = course.find((el) => Number(el.id) === Number(id));
     return courses ? courses.name : 'Kurs topilmadi';
   };
 
-  const getCoursePrice = (id: string) => {
-    const found = course.find((c) => String(c.id) === id);
+  const getCoursePrice = (id: number) => {
+    const found = course.find((c) => Number(c.id) === Number(id));
     return found ? `${Number(found.price).toLocaleString()} UZS` : 'Topilmadi';
   };
 
