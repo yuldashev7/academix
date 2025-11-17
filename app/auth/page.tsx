@@ -71,6 +71,26 @@ const Login = () => {
       document.cookie = `token=${data.accessToken};path=/`;
       document.cookie = `role=${user.role};path=/`;
       document.cookie = `userId=${user.id};path=/`;
+      console.log('Login user:', user);
+
+      if (user.role === 'teacher') {
+        const teacherGroups = await fetch(
+          `http://localhost:3600/groups?teacherId=${user.id}`
+        ).then((res) => res.json());
+
+        const firstGroupId =
+          teacherGroups.length > 0 ? teacherGroups[0].id : null;
+
+        localStorage.setItem(
+          'currentUser',
+          JSON.stringify({
+            id: user.id,
+            name: user.name,
+            groupId: firstGroupId,
+            role: user.role,
+          })
+        );
+      }
 
       toast.success('Tizimga muvaffaqiyatli kirdingiz');
 

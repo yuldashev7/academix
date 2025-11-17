@@ -1,5 +1,5 @@
 'use client';
-import { coureseT } from '@/app/types/types';
+import { coureseT, groupT, teachersT } from '@/app/types/types';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
-import { GetCourse } from '../get-course/get-course';
 import { toast } from 'sonner';
 import PostStudent from '@/app/api/student-api/post-student';
 import {
@@ -28,14 +27,20 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 import { Eye, EyeOff } from 'lucide-react';
+import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import GetGroup from '@/app/api/group-api/get-group';
 
 const AddStudent = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourse] = useState<coureseT[]>([]);
+  const [showPassword, setShowpassword] = useState<boolean>(false);
   const [selectedCourse, setSelectedCourse] = useState<coureseT | null>(null);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [groupName, setGroupName] = useState<groupT[]>([]);
+  const [selectTeacher, setSelectTeacher] = useState<teachersT[]>([]);
+
   const formSchema = z.object({
     name: z
       .string()
@@ -59,6 +64,8 @@ const AddStudent = () => {
       .refine((val) => !isNaN(Number(val.replace(/\s/g, ''))), {
         message: 'To‘lov summasi son bo‘lishi kerak',
       }),
+    groupId: z.string().min(1, 'Guruh tanlang'),
+    teacherId: z.string().min(1, 'Ustoz tanlang'),
   });
 
   const form = useForm({
@@ -70,6 +77,8 @@ const AddStudent = () => {
       phoneNumber: '',
       courseId: '',
       paidAmount: '',
+      groupId: '',
+      teacherId: '',
       role: 'student',
     },
   });
@@ -77,8 +86,15 @@ const AddStudent = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const courseData = await GetCourse();
+        const [courseData, teacherData, groupData] = await Promise.all([
+          GetCourse(),
+          GetTeacher(),
+          GetGroup(),
+        ]);
+
         setCourse(courseData);
+        setGroupName(groupData);
+        setSelectTeacher(teacherData);
       } catch (error) {
         toast.error('Kurslarni olishda xatolik yuz berdi');
       }
@@ -114,9 +130,9 @@ const AddStudent = () => {
   return (
     <>
       <div>
-        <Link href={'/super-admin/student'}>
-          <Button variant={'outline'}>Ortga Qaytish</Button>
-        </Link>
+        <Button variant={'outline'} onClick={() => router.back()}>
+          Ortga Qaytish
+        </Button>
       </div>
 
       <Form {...form}>
@@ -188,7 +204,7 @@ const AddStudent = () => {
                     <Button
                       variant={'ghost'}
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowpassword(!showPassword)}
                       className="absolute right-0 top-6"
                     >
                       {showPassword ? <Eye /> : <EyeOff />}
@@ -221,7 +237,7 @@ const AddStudent = () => {
             )}
           />
           <label>
-            Kurs
+            Kurslar
             <FormField
               control={form.control}
               name="courseId"
@@ -256,6 +272,72 @@ const AddStudent = () => {
               )}
             />
           </label>
+
+          <label>
+            Guruhlar
+            <FormField
+              control={form.control}
+              name="groupId"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={!selectedCourse}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Guruh tanlang" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Guruhlar</SelectLabel>
+                        {groupName
+                          .filter(
+                            (g) =>
+                              selectedCourse &&
+                              String(g.courseId) === String(selectedCourse.id)
+                          )
+                          .map((g) => (
+                            <SelectItem key={g.id} value={String(g.id)}>
+                              {g.name}
+                            </SelectItem>
+                          ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </label>
+
+          <label>
+            Ustozlar
+            <FormField
+              control={form.control}
+              name="teacherId"
+              render={({ field }) => (
+                <FormItem>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Ustoz tanlang"></SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Ustozlar</SelectLabel>
+                        {selectTeacher.map((t) => (
+                          <SelectItem key={t.id} value={String(t.id)}>
+                            {t.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </label>
+
           <input type="hidden" value="student" {...form.register('role')} />
           <Button type="submit" className="w-[100px]">
             {loading ? <Spinner /> : "Qo'shish"}

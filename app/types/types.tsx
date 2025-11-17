@@ -53,6 +53,7 @@ export interface coureseT {
   price: number;
   duration: string;
   totalFee: string;
+  fullPrice: number;
 }
 
 export interface studentT {
@@ -102,4 +103,24 @@ export interface postGroupT {
   name: string;
   courseId: number;
   teacherId: number;
+}
+
+export interface topicT {
+  id: number;
+  teacherId: string;
+  groupId: string;
+  title: string;
+  description: string;
+}
+
+export interface homeworkT {
+  id: number;
+  topicId: string;
+  teacherId: string;
+  groupId: string;
+  title: string;
+  description: string;
+  file?: string;
+  deadline: string;
+  createdAt: string;
 }

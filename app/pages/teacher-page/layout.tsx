@@ -11,7 +11,7 @@ import {
   SidebarFooter,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Users, LogOut, Settings, UserCheck } from 'lucide-react';
+import { Users, LogOut, Settings, UserCheck, FolderPlus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -23,6 +23,11 @@ const sidebarItems = [
     title: 'Davomat',
     href: '/pages/teacher-page/attendance',
     icon: UserCheck,
+  },
+  {
+    title: "Mavzu Qo'shish",
+    href: '/pages/teacher-page/add-topic',
+    icon: FolderPlus,
   },
   {
     title: 'Sozlamalar',

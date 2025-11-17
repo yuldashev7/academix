@@ -89,8 +89,12 @@ const AllPage = () => {
               {course?.category}
             </p>
             <p className="text-gray-700">
-              <span className="font-medium">Kurs Narxi:</span>{' '}
+              <span className="font-medium">Oyiga:</span>{' '}
               {FormatNumber(course?.price ?? 0)} so'm
+            </p>
+            <p className="text-gray-700">
+              <span className="font-medium">To'liq Kurs Narxi:</span>{' '}
+              {FormatNumber(course?.fullPrice ?? 0)} so'm
             </p>
           </div>
           <Link
@@ -144,7 +148,8 @@ const AllPage = () => {
                         </TableCell>
                         <TableCell className="w-[80px]">{el.name}</TableCell>
                         <TableCell className="w-[80px]">
-                          {teachers.map((t) => t.name)}
+                          {teachers.find((t) => Number(t.id) === el.teacherId)
+                            ?.name || 'Ustoz topilmadi'}
                         </TableCell>
                         <TableCell className="w-[80px]">
                           <Link

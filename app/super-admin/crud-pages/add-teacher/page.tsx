@@ -27,8 +27,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
-import { GetCourse } from '../get-course/get-course';
 import { Spinner } from '@/components/ui/spinner';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 import { Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
@@ -51,7 +51,7 @@ const formSchema = z.object({
 const AddTeacher = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<coureseT[]>([]);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPassword, setShowpassword] = useState<boolean>(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -96,9 +96,9 @@ const AddTeacher = () => {
     <div>
       <>
         <div>
-          <Link href={'/super-admin/teacher'}>
-            <Button variant={'outline'}>Ortga Qaytish</Button>
-          </Link>
+          <Button variant={'outline'} onClick={() => router.back()}>
+            Ortga Qaytish
+          </Button>
 
           <Form {...form}>
             <form
@@ -154,7 +154,7 @@ const AddTeacher = () => {
                         <Button
                           variant={'ghost'}
                           type="button"
-                          onClick={() => setShowPassword(!showPassword)}
+                          onClick={() => setShowpassword(!showPassword)}
                           className="absolute right-0 top-6"
                         >
                           {showPassword ? <Eye /> : <EyeOff />}
