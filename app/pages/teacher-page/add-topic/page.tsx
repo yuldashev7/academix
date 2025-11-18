@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import PostTopic from '@/app/api/home-work-api/post-topic';
 import { Spinner } from '@/components/ui/spinner';
+import Link from 'next/link';
 
 const teacherId = '6';
 const groupId = '1';
@@ -35,7 +36,15 @@ const AddTopicPage = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 space-y-5">
-      <h2 className="text-xl font-bold">Yangi Mavzu Qo‘shish</h2>
+      <div className="flex items-center justify-between ">
+        <h2 className="text-xl font-bold">Yangi Mavzu Qo‘shish</h2>
+        <Link
+          href={'/pages/teacher-page/old-topics'}
+          className="text-xl font-bold underline hover:text-gray-700 transition"
+        >
+          Eski mavzularni ko'rish
+        </Link>
+      </div>
       <CustomeInput
         name=""
         label=""

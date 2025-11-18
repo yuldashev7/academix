@@ -111,6 +111,7 @@ export interface topicT {
   groupId: string;
   title: string;
   description: string;
+  createdAt: string;
 }
 
 export interface homeworkT {
@@ -123,4 +124,11 @@ export interface homeworkT {
   file?: string;
   deadline: string;
   createdAt: string;
+}
+
+export interface paginationT {
+  currentPage: number;
+  totalItems: number;
+  itemsPerPage?: number;
+  onPageChange: (page: number) => void;
 }

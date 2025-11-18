@@ -108,11 +108,14 @@ export default function Student() {
 
   return (
     <div>
-      <Link href={'/pages/teacher-page/crud-pages/add-student'}>
+      {/* <Link href={'/pages/teacher-page/crud-pages/add-student'}>
         <Button variant={'outline'} className="w-[140px]">
           O‘quvchi qo‘shish
         </Button>
-      </Link>
+      </Link> */}
+      <h1 className="text-center font-medium text-[20px] text-gray-800">
+        O'quvchilar
+      </h1>
 
       <div className="w-full overflow-x-auto mt-5">
         <div className="border rounded-md">
@@ -161,7 +164,7 @@ export default function Student() {
                       >
                         Ko‘rish
                       </Button>
-                      <Button
+                      {/* <Button
                         onClick={() =>
                           router.push(
                             `/pages/teacher-page/crud-pages/edit-student/${item.id}`
@@ -170,14 +173,14 @@ export default function Student() {
                         className="w-[70px]"
                       >
                         Tahrirlash
-                      </Button>
-                      <Button
+                      </Button> */}
+                      {/* <Button
                         onClick={() => handleDelete(item.id)}
                         className="w-[70px]"
                         variant={'destructive'}
                       >
                         {deletingId === item.id ? <Spinner /> : "O'chirish"}
-                      </Button>
+                      </Button> */}
                     </div>
                   </TableCell>
                 </TableRow>
