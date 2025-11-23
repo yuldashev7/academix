@@ -1,7 +1,4 @@
 'use client';
-
-import CustomeInput from '@/app/components/custome-input';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,37 +6,43 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import PostAdmin from '@/app/api/admin-api/post-admin';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
-import { Spinner } from '@/components/ui/spinner';
-import TableSkeleton from '@/app/components/table-skeleton';
 import { Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { zodResolver } from '@hookform/resolvers/zod';
+import PostAdmin from '@/app/api/admin-api/post-admin';
+import CustomeInput from '@/app/components/custome-input';
 
 const formSchema = z.object({
   name: z.string().min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
+
   email: z
     .string()
     .min(5, { message: 'Email kiritish shart' })
     .email({ message: 'Email formati noto‘g‘ri' })
     .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+
   phoneNumber: z.string().regex(/^\+998-\d{2}-\d{3}-\d{2}-\d{2}$/, {
     message: 'Telefon raqam formati noto‘g‘ri',
   }),
+
   role: z.string().min(1),
+
   password: z
     .string()
     .min(4, { message: "Parol kamida 4 ta belgi bo'lishi kerak" }),
 });
 const AddAdmin = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,6 +53,7 @@ const AddAdmin = () => {
       role: 'admin',
     },
   });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);

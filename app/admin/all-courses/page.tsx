@@ -1,10 +1,10 @@
 'use client';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
+import { coureseT } from '@/app/types/types';
 import CourseSkeleton from '@/app/components/config/loadings/course-skeleton';
 import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
-import { coureseT } from '@/app/types/types';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
 const AllCourses = () => {
   const [courses, setCourses] = useState<coureseT[]>([]);
@@ -12,6 +12,7 @@ const AllCourses = () => {
 
   useEffect(() => {
     setLoading(true);
+
     const fetchCourse = async () => {
       try {
         const data = await GetCourse();
@@ -22,6 +23,7 @@ const AllCourses = () => {
         setLoading(false);
       }
     };
+
     fetchCourse();
   }, []);
 

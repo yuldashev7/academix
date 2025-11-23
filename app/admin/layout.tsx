@@ -11,11 +11,11 @@ import {
   SidebarFooter,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Users, LogOut, GraduationCap, Code2 } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Users, LogOut, GraduationCap, Code2 } from 'lucide-react';
 
 const sidebarItems = [
   { title: 'Ustozlar', href: '/admin/teacher', icon: GraduationCap },

@@ -1,20 +1,20 @@
 'use client';
+import Link from 'next/link';
+import { toast } from 'sonner';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import CustomeInput from '@/app/components/custome-input';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
-import PostTopic from '@/app/api/home-work-api/post-topic';
 import { Spinner } from '@/components/ui/spinner';
-import Link from 'next/link';
+import CustomeInput from '@/app/components/custome-input';
+import PostTopic from '@/app/api/home-work-api/post-topic';
 
 const teacherId = '6';
 const groupId = '1';
 
 const AddTopicPage = () => {
   const router = useRouter();
-  const [newTopicTitle, setNewTopicTitle] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [newTopicTitle, setNewTopicTitle] = useState<string>('');
 
   const handleAddTopic = async () => {
     if (!newTopicTitle.trim()) return toast.error("Mavzu bo'sh bo'lmasin");

@@ -1,19 +1,19 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Calendar } from '@/components/ui/calendar';
-import PostHomework from '@/app/api/home-work-api/post-homework';
 import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
+import { Label } from '@/components/ui/label';
+import { homeworkT } from '@/app/types/types';
+import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
+import { useParams, useRouter } from 'next/navigation';
 import { Calendar24 } from '@/components/ui/calendar24';
 import { TimePicker } from '@/components/ui/time-picker';
+import PostHomework from '@/app/api/home-work-api/post-homework';
+import PostHomeNotf from '@/app/api/home-work-notf/post-home-notf';
 
 const AddHomeworkPage = () => {
   const { id } = useParams();
-  const router = useRouter();
 
   const [teacherId, setTeacherId] = useState<string | null>(null);
   const [groupId, setGroupId] = useState<string | null>(null);
@@ -29,17 +29,15 @@ const AddHomeworkPage = () => {
 
   const topicId = Array.isArray(id) ? id[0] : id;
 
-  const [title, setTitle] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
-  const [deadline, setDeadline] = useState<string>('');
+  const [time, setTime] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [time, setTime] = useState<string>('');
 
   const handleAddHomework = async () => {
     if (!topicId || !teacherId || !groupId)
       return toast.error("Topic yoki user ma'lumotlari mavjud emas");
-    if (!topicId) return toast.error('Topic ID mavjud emas');
     if (!title.trim()) return toast.error("Sarlavha bo'sh bo'lmasin");
     if (!date) return toast.error('Sanani tanlang');
     if (!time) return toast.error('Vaqtini tanlang');
@@ -48,11 +46,7 @@ const AddHomeworkPage = () => {
     const finalDeadline = `${formatedDate}T${time}`;
 
     setLoading(true);
-    toast.success('Uy ish berildi');
-    setTitle('');
-    setDeadline('');
-    setDesc('');
-    setTime(''), setDate(undefined);
+
     try {
       const homework = await PostHomework(
         teacherId!,
@@ -61,11 +55,25 @@ const AddHomeworkPage = () => {
         title,
         finalDeadline
       );
+      console.log('Homework POST response:', homework);
+
       if (homework) {
+        const notf = await PostHomeNotf({
+          groupId: Number(groupId),
+          title: 'Yangi Uy Ishi',
+          message: `${title} mavzusi bo'yicha uy ishi berildi`,
+          deadline: finalDeadline,
+        });
+
         toast.success('Uy ish qo‘shildi');
-        router.push(`/pages/teacher-pagete/topics/${id}`);
+
+        setTitle('');
+        setDesc('');
+        setTime('');
+        setDate(undefined);
       }
-    } catch {
+    } catch (error) {
+      console.error('Xatolik:', error);
       toast.error('Xatolik yuz berdi');
     } finally {
       setLoading(false);

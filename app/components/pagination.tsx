@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button';
 import { paginationT } from '../types/types';
+import { Button } from '@/components/ui/button';
 
 const Pagination = ({
   currentPage,
@@ -17,7 +17,7 @@ const Pagination = ({
         variant={'outline'}
         onClick={() => onPageChange(currentPage - 1)}
       >
-        Previous
+        Ortga
       </Button>
       <div className="flex gap-[10px]">
         {Array.from({ length: totalPages }).map((_, i) => (
@@ -34,7 +34,7 @@ const Pagination = ({
           variant={'outline'}
           onClick={() => onPageChange(currentPage + 1)}
         >
-          Next
+          Keyingisi
         </Button>
       </div>
     </div>

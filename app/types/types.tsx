@@ -132,3 +132,21 @@ export interface paginationT {
   itemsPerPage?: number;
   onPageChange: (page: number) => void;
 }
+
+export interface notificationT {
+  id: number;
+  title: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+  groupId: number;
+  _id: string;
+  type: 'attendance' | 'homework';
+}
+
+export interface postHomeNotfT {
+  groupId: number;
+  title: string;
+  message: string;
+  deadline: string;
+}

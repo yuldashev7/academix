@@ -1,7 +1,7 @@
-import { Label } from '@/components/ui/label';
-import { inputT } from '../types/types';
-import { Input } from '@/components/ui/input';
 import React from 'react';
+import { inputT } from '../types/types';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 const CustomeInput = ({
   name,
@@ -19,9 +19,8 @@ const CustomeInput = ({
   }
 
   const handlePhoneFormat = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let input = e.target.value.replace(/\D/g, ''); // faqat raqam qoldiradi
+    let input = e.target.value.replace(/\D/g, '');
 
-    // +998 prefiksini saqlaymiz
     if (!input.startsWith('998')) input = '998' + input;
 
     let formatted = '+';
@@ -32,7 +31,7 @@ const CustomeInput = ({
     if (input.length > 10) formatted += '-' + input.substring(10, 12);
 
     e.target.value = formatted;
-    onChange && onChange(e); // react-hook-form uchun
+    onChange && onChange(e);
   };
 
   return (

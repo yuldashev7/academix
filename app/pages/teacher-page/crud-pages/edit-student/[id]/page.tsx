@@ -1,14 +1,4 @@
 'use client';
-import { coureseT } from '@/app/types/types';
-import { Button } from '@/components/ui/button';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import z from 'zod';
-import { toast } from 'sonner';
-import EditStudent from '@/app/api/student-api/edit-student';
 import {
   Form,
   FormControl,
@@ -16,7 +6,6 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import CustomeInput from '@/app/components/custome-input';
 import {
   Select,
   SelectContent,
@@ -26,7 +15,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import z from 'zod';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { coureseT } from '@/app/types/types';
+import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useParams, useRouter } from 'next/navigation';
+import CustomeInput from '@/app/components/custome-input';
+import EditStudent from '@/app/api/student-api/edit-student';
 import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 const EditStudentPage = () => {
@@ -39,16 +39,21 @@ const EditStudentPage = () => {
     name: z
       .string()
       .min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
+
     email: z
       .string()
       .min(5, { message: 'Email kiritish shart' })
       .email({ message: 'Email formati noto‘g‘ri' })
       .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+
     phoneNumber: z.string().regex(/^\+998-\d{2}-\d{3}-\d{2}-\d{2}$/, {
       message: 'Telefon raqam formati noto‘g‘ri',
     }),
+
     role: z.string().min(1),
+
     courseId: z.string().min(1, 'Kurs tanlang'),
+
     paidAmount: z
       .string()
       .min(1, 'To‘lagan summasini kiriting')
@@ -94,6 +99,7 @@ const EditStudentPage = () => {
             toast.error('Kurslarni olishda xatolik yuz berdi');
           }
         };
+
         fetchCourse();
       } catch (error) {
         toast.error("O'quvchi ma’lumotlarini olishda xatolik");
@@ -101,6 +107,7 @@ const EditStudentPage = () => {
         setLoading(false);
       }
     };
+
     fetchStudent();
   }, [id, form]);
 

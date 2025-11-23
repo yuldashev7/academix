@@ -1,4 +1,3 @@
-import React from 'react';
 import { toast } from 'sonner';
 
 const PostHomework = async (
@@ -22,10 +21,14 @@ const PostHomework = async (
         createdAt: new Date().toISOString(),
       }),
     });
+
     if (!res.ok) {
       toast.error("Uy ishi qo'shib bo'lmadi");
+      return null;
     }
-    const data = res.json();
+
+    const data = await res.json();
+    return data;
   } catch (error) {
     toast.error("Uy ishi qo'shishda xatolik");
     return null;

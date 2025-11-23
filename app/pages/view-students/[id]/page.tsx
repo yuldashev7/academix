@@ -1,10 +1,4 @@
 'use client';
-import GetGroup from '@/app/api/group-api/get-group';
-import GetStudent from '@/app/api/student-api/get-student';
-import StudentModal from '@/app/components/student-modal';
-import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
-import { coureseT, groupT, studentT, usersT } from '@/app/types/types';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -13,20 +7,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import GetGroup from '@/app/api/group-api/get-group';
+import { useParams, useRouter } from 'next/navigation';
+import StudentModal from '@/app/components/student-modal';
+import GetStudent from '@/app/api/student-api/get-student';
+import { coureseT, groupT, studentT } from '@/app/types/types';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 const ViewStudents = () => {
-  const [course, setCourse] = useState<coureseT | null>(null);
   const [user, setUser] = useState<studentT[]>([]);
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const [group, setGroup] = useState<groupT[]>([]);
-
-  console.log('user', user);
-  console.log('group', group);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [course, setCourse] = useState<coureseT | null>(null);
 
   const router = useRouter();
   const params = useParams();
@@ -56,6 +52,7 @@ const ViewStudents = () => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [courseId]);
 

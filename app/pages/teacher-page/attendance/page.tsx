@@ -1,13 +1,4 @@
 'use client';
-import GetStudent from '@/app/api/student-api/get-student';
-import GetTeacher from '@/app/api/teacher-api/get-teacher';
-import AttendanceSkeleton from '@/app/components/attedance-skeleton';
-import TableSkeleton from '@/app/components/table-skeleton';
-import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
-import { coureseT, studentT, teachersT } from '@/app/types/types';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import { Switch } from '@/components/ui/switch';
 import {
   Table,
   TableBody,
@@ -16,15 +7,24 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import UseGetCookie from '@/hooks/use-get-cookie';
-import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Spinner } from '@/components/ui/spinner';
+import UseGetCookie from '@/hooks/use-get-cookie';
+import GetStudent from '@/app/api/student-api/get-student';
+import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import { coureseT, studentT, teachersT } from '@/app/types/types';
+import AttendanceSkeleton from '@/app/components/attedance-skeleton';
+import PostNotification from '@/app/api/notification-api/post-notification';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 const Attendance = () => {
-  const [teacher, setTeacher] = useState<teachersT | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<coureseT[]>([]);
   const [student, setStudent] = useState<studentT[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [teacher, setTeacher] = useState<teachersT | null>(null);
   const [attendance, setAttendance] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -56,6 +56,7 @@ const Attendance = () => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
@@ -63,8 +64,13 @@ const Attendance = () => {
     setAttendance((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     localStorage.setItem('attendance', JSON.stringify(attendance));
+
+    const presentStudents = student.filter((s) => attendance[s.id]);
+
+    await Promise.all(presentStudents.map((s) => PostNotification(s.id)));
+
     toast.success('Davomat saqlandi!');
   };
 

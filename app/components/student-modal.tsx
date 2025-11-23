@@ -1,13 +1,9 @@
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   LineChart,
@@ -18,11 +14,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-
-import { progressT, StudentModalT } from '../types/types';
-import GetStudent from '../api/student-api/get-student';
 import { toast } from 'sonner';
 import { useEffect, useState } from 'react';
+import GetStudent from '../api/student-api/get-student';
+import { progressT, StudentModalT } from '../types/types';
 
 const randomprogress = () => {
   const lessons = ['Dars 1', 'Dars 2', 'Dars 3', 'Dars 4', 'Dars 5'];

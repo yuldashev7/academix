@@ -1,9 +1,9 @@
 'use client';
-import GetTopics from '@/app/api/home-work-api/get-topics';
+import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import GetTopics from '@/app/api/home-work-api/get-topics';
 
 const ToppicsPage = () => {
   const { id } = useParams();
@@ -21,6 +21,7 @@ const ToppicsPage = () => {
         toast.error('Topic topilmadi');
       }
     };
+
     fetchTopic();
   }, [id]);
   return (

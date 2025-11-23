@@ -1,5 +1,5 @@
-import { postTeacherT } from '@/app/types/types';
 import { toast } from 'sonner';
+import { postTeacherT } from '@/app/types/types';
 
 const PostTeacher = async (data: postTeacherT) => {
   try {

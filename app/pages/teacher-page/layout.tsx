@@ -11,11 +11,11 @@ import {
   SidebarFooter,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Users, LogOut, Settings, UserCheck, FolderPlus } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Users, LogOut, Settings, UserCheck, FolderPlus } from 'lucide-react';
 
 const sidebarItems = [
   { title: "O'quvchilar", href: '/pages/teacher-page/student', icon: Users },

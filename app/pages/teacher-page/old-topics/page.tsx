@@ -1,10 +1,4 @@
 'use client';
-import GetGroup from '@/app/api/group-api/get-group';
-import GetOldHomeWork from '@/app/api/home-work-api/get-old-homework';
-import GetTopics from '@/app/api/home-work-api/get-topics';
-import GetTeacher from '@/app/api/teacher-api/get-teacher';
-import Pagination from '@/app/components/pagination';
-import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 import {
   coureseT,
   groupT,
@@ -12,7 +6,6 @@ import {
   teachersT,
   topicT,
 } from '@/app/types/types';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -21,20 +14,25 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import Pagination from '@/app/components/pagination';
+import GetGroup from '@/app/api/group-api/get-group';
+import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import GetOldHomeWork from '@/app/api/home-work-api/get-old-homework';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 const itemsPerPage = 10;
 
 const OldTopicsPage = () => {
   const router = useRouter();
   const [page, setPage] = useState<number>(1);
+  const [group, setGroup] = useState<groupT[]>([]);
+  const [course, setCourse] = useState<coureseT[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [teacher, setTeacher] = useState<teachersT[]>([]);
-  const [oldTopics, setOldTopics] = useState<topicT[]>([]);
-  const [course, setCourse] = useState<coureseT[]>([]);
-  const [group, setGroup] = useState<groupT[]>([]);
   const [oldHomeWorks, setOldHomeWorks] = useState<homeworkT[]>([]);
 
   useEffect(() => {
@@ -80,6 +78,7 @@ const OldTopicsPage = () => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [router]);
 

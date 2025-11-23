@@ -1,5 +1,3 @@
-import React from 'react';
-
 const EditAdmin = async (
   id: string,
   editable: { name?: string; email?: string; phoneNumber?: string }

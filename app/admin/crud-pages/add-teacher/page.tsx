@@ -1,9 +1,4 @@
 'use client';
-import PostTeacher from '@/app/api/teacher-api/post-teacher';
-import CustomeInput from '@/app/components/custome-input';
-import TableSkeleton from '@/app/components/table-skeleton';
-import { coureseT } from '@/app/types/types';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -20,39 +15,48 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import z from 'zod';
-import { Spinner } from '@/components/ui/spinner';
-import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { coureseT } from '@/app/types/types';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { zodResolver } from '@hookform/resolvers/zod';
+import CustomeInput from '@/app/components/custome-input';
+import PostTeacher from '@/app/api/teacher-api/post-teacher';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 const formSchema = z.object({
   name: z.string().min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
+
   email: z
     .string()
     .min(5, { message: 'Email kiritish shart' })
     .email({ message: 'Email formati noto‘g‘ri' })
     .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+
   phoneNumber: z.string().regex(/^\+998-\d{2}-\d{3}-\d{2}-\d{2}$/, {
     message: 'Telefon raqam formati noto‘g‘ri',
   }),
+
   role: z.string().min(1),
+
   password: z
     .string()
     .min(4, { message: "Parol kamida 4 ta belgi bo'lishi kerak" }),
+
   courseId: z.string().min(1, 'Kurs tanlang'),
 });
 
 const AddTeacher = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<coureseT[]>([]);
   const [showPassword, setShowpassword] = useState<boolean>(false);
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -74,6 +78,7 @@ const AddTeacher = () => {
         toast.error('Kurslarni olishda xatolik yuz berdi');
       }
     };
+
     fetchCourses();
   }, []);
 

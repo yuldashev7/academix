@@ -1,10 +1,4 @@
 'use client';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -13,12 +7,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-
-import { Input } from '@/components/ui/input';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Spinner } from '@/components/ui/spinner';
+import { z } from 'zod';
 import { toast } from 'sonner';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, KeyRound, Mail } from 'lucide-react';
 
 const formSchema = z.object({
@@ -28,7 +25,9 @@ const formSchema = z.object({
     .min(4, {
       message: 'Email kamida 4 ta belgi bolishi kerak',
     })
+
     .email("Iltimos tog'ri email kiriting !"),
+
   password: z
     .string()
     .min(4, { message: "Parol kamida 4 ta belgi bo'lishi kerak" }),
@@ -105,13 +104,12 @@ const Login = () => {
           router.push('/pages/teacher-page/student');
           break;
         case 'student':
-          router.push('/student');
+          router.push('/pages/student-page');
           break;
         default:
           setError("Nomalum ro'l");
       }
     } catch (error) {
-      console.log('Login error', error);
       setError('Xatolik yuz berdi, qayta urinib ko‘ring');
     } finally {
       setLoading(false);

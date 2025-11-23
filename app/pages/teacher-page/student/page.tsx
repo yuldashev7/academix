@@ -1,8 +1,4 @@
 'use client';
-import GetStudent from '@/app/api/student-api/get-student';
-import { coureseT, studentT } from '@/app/types/types';
-import { Button } from '@/components/ui/button';
-
 import {
   Table,
   TableBody,
@@ -11,25 +7,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import TableSkeleton from '@/app/components/table-skeleton';
-import StudentModal from '@/app/components/student-modal';
-import DeleteStudent from '@/app/api/student-api/delete-student';
-import { toast } from 'sonner';
-import { Spinner } from '@/components/ui/spinner';
-import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
+
+import { Button } from '@/components/ui/button';
 import UseGetCookie from '@/hooks/use-get-cookie';
+import React, { useEffect, useState } from 'react';
+import { coureseT, studentT } from '@/app/types/types';
+import StudentModal from '@/app/components/student-modal';
+import GetStudent from '@/app/api/student-api/get-student';
+import TableSkeleton from '@/app/components/table-skeleton';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 export default function Student() {
-  const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<studentT[]>([]);
   const [course, setCourse] = useState<coureseT[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,10 +50,12 @@ export default function Student() {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
   if (loading) return <TableSkeleton />;
+
   if (user.length === 0)
     return (
       <p className="text-sm text-muted-foreground p-4">Foydalanuvchilar yo‘q</p>
@@ -85,21 +80,6 @@ export default function Student() {
     return found ? `${Number(found.price).toLocaleString()} UZS` : 'Topilmadi';
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      setDeletingId(id);
-      const res = await DeleteStudent(id);
-      if (res) {
-        setUser((el) => el.filter((del) => del.id !== id));
-        toast.success("O'quvchi muvafaqqiyatli o'chirildi");
-      }
-    } catch (error) {
-      toast.error('Xatoli yuz berdi');
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
   const formatPrice = (price: string | number) => {
     const num = Number(price);
     if (isNaN(num)) return '0';
@@ -108,11 +88,6 @@ export default function Student() {
 
   return (
     <div>
-      {/* <Link href={'/pages/teacher-page/crud-pages/add-student'}>
-        <Button variant={'outline'} className="w-[140px]">
-          O‘quvchi qo‘shish
-        </Button>
-      </Link> */}
       <h1 className="text-center font-medium text-[20px] text-gray-800">
         O'quvchilar
       </h1>

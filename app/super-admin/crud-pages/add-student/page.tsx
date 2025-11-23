@@ -1,14 +1,4 @@
 'use client';
-import { coureseT, groupT, teachersT } from '@/app/types/types';
-import { Button } from '@/components/ui/button';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import z from 'zod';
-import { toast } from 'sonner';
-import PostStudent from '@/app/api/student-api/post-student';
 import {
   Form,
   FormControl,
@@ -16,7 +6,6 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import CustomeInput from '@/app/components/custome-input';
 import {
   Select,
   SelectContent,
@@ -26,44 +15,60 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Spinner } from '@/components/ui/spinner';
-import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
+import z from 'zod';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react';
-import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import GetGroup from '@/app/api/group-api/get-group';
+import { zodResolver } from '@hookform/resolvers/zod';
+import CustomeInput from '@/app/components/custome-input';
+import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import PostStudent from '@/app/api/student-api/post-student';
+import { coureseT, groupT, teachersT } from '@/app/types/types';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 const AddStudent = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourse] = useState<coureseT[]>([]);
-  const [showPassword, setShowpassword] = useState<boolean>(false);
-  const [selectedCourse, setSelectedCourse] = useState<coureseT | null>(null);
   const [groupName, setGroupName] = useState<groupT[]>([]);
+  const [showPassword, setShowpassword] = useState<boolean>(false);
   const [selectTeacher, setSelectTeacher] = useState<teachersT[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<coureseT | null>(null);
 
   const formSchema = z.object({
     name: z
       .string()
       .min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
+
     email: z
       .string()
       .min(5, { message: 'Email kiritish shart' })
       .email({ message: 'Email formati noto‘g‘ri' })
       .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+
     phoneNumber: z.string().regex(/^\+998-\d{2}-\d{3}-\d{2}-\d{2}$/, {
       message: 'Telefon raqam formati noto‘g‘ri',
     }),
+
     role: z.string().min(1),
     password: z
       .string()
       .min(4, { message: "Parol kamida 4 ta belgi bo'lishi kerak" }),
+
     courseId: z.string().min(1, 'Kurs tanlang'),
+
     paidAmount: z
       .string()
       .min(1, 'To‘lagan summasini kiriting')
       .refine((val) => !isNaN(Number(val.replace(/\s/g, ''))), {
         message: 'To‘lov summasi son bo‘lishi kerak',
       }),
+
     groupId: z.string().min(1, 'Guruh tanlang'),
     teacherId: z.string().min(1, 'Ustoz tanlang'),
   });
@@ -99,6 +104,7 @@ const AddStudent = () => {
         toast.error('Kurslarni olishda xatolik yuz berdi');
       }
     };
+
     fetchCourse();
   }, []);
 

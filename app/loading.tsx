@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 const Loading = () => {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState<boolean>(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {

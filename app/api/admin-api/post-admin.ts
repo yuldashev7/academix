@@ -1,5 +1,5 @@
-import { postAdminT } from '../../types/types';
 import { toast } from 'sonner';
+import { postAdminT } from '../../types/types';
 
 const PostAdmin = async (data: postAdminT) => {
   try {

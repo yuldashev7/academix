@@ -1,7 +1,4 @@
 'use client';
-import GetStudent from '@/app/api/student-api/get-student';
-import { coureseT, groupT, studentT, teachersT } from '@/app/types/types';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -11,28 +8,31 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import TableSkeleton from '@/app/components/table-skeleton';
-import StudentModal from '@/app/components/student-modal';
-import DeleteStudent from '@/app/api/student-api/delete-student';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
-import GetTeacher from '@/app/api/teacher-api/get-teacher';
-import GetGroup from '@/app/api/group-api/get-group';
 import UseGetCookie from '@/hooks/use-get-cookie';
+import React, { useEffect, useState } from 'react';
+import GetGroup from '@/app/api/group-api/get-group';
+import StudentModal from '@/app/components/student-modal';
+import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import GetStudent from '@/app/api/student-api/get-student';
+import TableSkeleton from '@/app/components/table-skeleton';
+import DeleteStudent from '@/app/api/student-api/delete-student';
+import { coureseT, groupT, studentT, teachersT } from '@/app/types/types';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 export default function Student() {
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
   const [user, setUser] = useState<studentT[]>([]);
   const [course, setCourse] = useState<coureseT[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [getTeacher, setGetTeacher] = useState<teachersT[]>([]);
   const [selectedGroup, setSelectedGropu] = useState<groupT[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,8 +50,6 @@ export default function Student() {
             teacherId: s.teacherId ? Number(s.teacherId) : null,
           }))
         );
-        console.log('Student data:', students);
-
         const courses = await GetCourse();
         setCourse(courses);
 
@@ -67,6 +65,7 @@ export default function Student() {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 

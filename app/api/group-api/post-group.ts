@@ -1,6 +1,5 @@
-import { groupT, postGroupT } from '@/app/types/types';
-import React from 'react';
 import { toast } from 'sonner';
+import { groupT, postGroupT } from '@/app/types/types';
 
 const PostGroup = async (data: postGroupT) => {
   try {

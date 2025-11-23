@@ -1,31 +1,34 @@
 'use client';
-import GetTeacher from '@/app/api/teacher-api/get-teacher';
-import CustomeInput from '@/app/components/custome-input';
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import z from 'zod';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { Eye, EyeOff } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import CustomeInput from '@/app/components/custome-input';
+import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 
 const TeacherProfile = () => {
-  const [showPassword, SetShowPassword] = useState<boolean>(false);
   const [teacherId, setTeacherId] = useState<string>('');
+  const [showPassword, SetShowPassword] = useState<boolean>(false);
   const formSchema = z.object({
     name: z
       .string()
       .min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
+
     email: z
       .string()
       .min(5, { message: 'Email kiritish shart' })
       .email({ message: 'Email formati noto‘g‘ri' })
       .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+
     password: z
       .string()
       .min(4, { message: "Parol Kamida 4 ta belgi bo'lishi kerak" }),
+
     phoneNumber: z.string().regex(/^\+998-\d{2}-\d{3}-\d{2}-\d{2}$/, {
       message: 'Telefon raqam formati noto‘g‘ri',
     }),
@@ -60,6 +63,7 @@ const TeacherProfile = () => {
         toast.error('Ustoz ma’lumotlarini olishda xatolik');
       }
     };
+
     fetchTeacher();
   }, [form]);
 

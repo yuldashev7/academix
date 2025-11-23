@@ -1,31 +1,29 @@
 'use client';
-
-import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import Link from 'next/link';
+import { toast } from 'sonner';
 import { usersT } from '../types/types';
+import { useRouter } from 'next/navigation';
 import { getAdmins } from '@/lib/get-admins';
 import TableSkeleton from './table-skeleton';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import DeleteAdmin from '../api/admin-api/delete-admin';
-import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
+import React, { useEffect, useState } from 'react';
+import DeleteAdmin from '../api/admin-api/delete-admin';
 
 const CustomeTable = () => {
+  const router = useRouter();
   const [user, setUser] = useState<usersT[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +36,7 @@ const CustomeTable = () => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 

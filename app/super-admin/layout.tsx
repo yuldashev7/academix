@@ -11,11 +11,11 @@ import {
   SidebarFooter,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Users, LogOut, CrownIcon, GraduationCap } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Users, LogOut, CrownIcon, GraduationCap } from 'lucide-react';
 
 const sidebarItems = [
   { title: 'Adminlar', href: '/super-admin/admin', icon: CrownIcon },

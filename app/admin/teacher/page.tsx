@@ -1,33 +1,31 @@
 'use client';
-
-import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { teachersT, coureseT } from '@/app/types/types';
-import TableSkeleton from '@/app/components/table-skeleton';
-import GetTeacher from '@/app/api/teacher-api/get-teacher';
-import DeleteTeacher from '@/app/api/teacher-api/delete-teacher';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import React, { useEffect, useState } from 'react';
+import { teachersT, coureseT } from '@/app/types/types';
+import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import TableSkeleton from '@/app/components/table-skeleton';
+import DeleteTeacher from '@/app/api/teacher-api/delete-teacher';
 import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 const Teacher = () => {
-  const [user, setUser] = useState<teachersT[]>([]);
-  const [courses, setCourse] = useState<coureseT[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [user, setUser] = useState<teachersT[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [courses, setCourse] = useState<coureseT[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,6 +42,7 @@ const Teacher = () => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 

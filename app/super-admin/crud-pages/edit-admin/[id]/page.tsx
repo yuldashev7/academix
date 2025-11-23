@@ -1,7 +1,4 @@
 'use client';
-import EditAdmin from '@/app/api/admin-api/edit-admin';
-import CustomeInput from '@/app/components/custome-input';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,32 +6,39 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Spinner } from '@/components/ui/spinner';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import z from 'zod';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import React, { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useParams, useRouter } from 'next/navigation';
+import EditAdmin from '@/app/api/admin-api/edit-admin';
+import CustomeInput from '@/app/components/custome-input';
 
 const EditAdminPage = () => {
   const { id } = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
+
   const formSchema = z.object({
     name: z
       .string()
       .min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
+
     email: z
       .string()
       .min(5, { message: 'Email kiritish shart' })
       .email({ message: 'Email formati noto‘g‘ri' })
       .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+
     phoneNumber: z.string().regex(/^\+998-\d{2}-\d{3}-\d{2}-\d{2}$/, {
       message: 'Telefon raqam formati noto‘g‘ri',
     }),
+
     role: z.literal('admin'),
   });
 
@@ -67,6 +71,7 @@ const EditAdminPage = () => {
         setLoading(false);
       }
     };
+
     fetchAdmin();
   }, [id, form]);
 

@@ -1,13 +1,4 @@
 'use client';
-import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
-import { coureseT, groupT, teachersT } from '@/app/types/types';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { FormatNumber } from '@/hooks/use-number-formetter';
-import Link from 'next/link';
-import BackIcon from '@/public/icons/back-icon';
-import GetGroup from '@/app/api/group-api/get-group';
 import {
   Table,
   TableBody,
@@ -16,15 +7,24 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import BackIcon from '@/public/icons/back-icon';
+import GetGroup from '@/app/api/group-api/get-group';
 import GetTeacher from '@/app/api/teacher-api/get-teacher';
+import { FormatNumber } from '@/hooks/use-number-formetter';
+import { coureseT, groupT, teachersT } from '@/app/types/types';
+import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 
 const AllPage = () => {
   const params = useParams();
   const courseId = params.id;
-  const [course, setCourse] = useState<coureseT | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [groups, setGroups] = useState<groupT[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [teachers, setTeacher] = useState<teachersT[]>([]);
+  const [course, setCourse] = useState<coureseT | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -35,6 +35,7 @@ const AllPage = () => {
           GetGroup(),
           GetTeacher(),
         ]);
+
         setCourse(courseData), setGroups(groupData), setTeacher(teachersData);
         const selected = courseData.find(
           (item: coureseT) => item.id.toString() === courseId
