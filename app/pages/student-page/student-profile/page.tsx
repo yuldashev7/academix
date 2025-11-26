@@ -7,10 +7,10 @@ import { CameraIcon } from 'lucide-react';
 import GetStudent from '@/app/api/student-api/get-student';
 import { contractsT, studentT } from '@/app/types/types';
 import { EditModal } from './components/edit-modal';
-import PencilIcon from '@/public/icons/pencil-icon';
 import { PhotoModal } from './components/photo-modal';
 import GetContracts from '@/app/api/contracts-api/get-contracts';
 import { PasswordModal } from './components/password-modal';
+import PencilIcon from '@/public/icons/pencil-icon';
 
 export default function StudentProfile() {
   const [user, setUser] = useState<studentT | null>(null);
@@ -61,6 +61,7 @@ export default function StudentProfile() {
       }
     };
 
+    if (typeof window === 'undefined') return;
     fetchData();
 
     const fetchContract = async () => {
@@ -83,7 +84,7 @@ export default function StudentProfile() {
           </h1>
           <button
             onClick={() => setOpen(true)}
-            className="transition-all duration-200 hover:text-gray-600"
+            className="transition-all duration-200 hover:text-gray-600 w-[20px]"
           >
             <PencilIcon />
           </button>
@@ -92,7 +93,7 @@ export default function StudentProfile() {
         {loading ? (
           <p className="mt-6">Yuklanmoqda...</p>
         ) : user ? (
-          <div className="flex justify-between md:flex-row mt-10 gap-15">
+          <div className="flex justify-between md:flex-row mt-10 gap-[55px]">
             <div className="flex items-start gap-10">
               <div className="text-center">
                 <div className="border rounded-md p-2 w-[170px] text-center">

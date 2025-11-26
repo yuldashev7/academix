@@ -66,13 +66,17 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
   const [studentGroupId, setStudentGroupId] = useState<string | null>(null);
 
   useEffect(() => {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-      const user = JSON.parse(currentUser);
-      const id = GetStudentById();
-      if (id) setStudentId(id);
-      if (user.groupId) setStudentGroupId(String(user.groupId));
-    }
+    const loadStudent = async () => {
+      const currentUser = localStorage.getItem('currentUser');
+      if (currentUser) {
+        const user = JSON.parse(currentUser);
+        const id = GetStudentById();
+        if (id) setStudentId(id);
+        if (user.groupId) setStudentGroupId(String(user.groupId));
+      }
+    };
+
+    loadStudent();
   }, []);
 
   useEffect(() => {
@@ -112,8 +116,6 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
               type: 'homework',
             })),
           ].filter((n) => !clearedId.includes(n._id));
-
-          setNotification(formatted);
 
           return formatted.sort(
             (a, b) =>
@@ -222,18 +224,12 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
                 </SidebarGroupContent>
               </SidebarGroup>
             </SidebarContent>
-
-            <SidebarFooter>
-              <SidebarMenu>
-                <SidebarMenuItem></SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarFooter>
           </Sidebar>
         </div>
 
         <div className="flex-1 flex flex-col">
-          <header className="bg-[#F9FAFB] md:py-[34px] px-[10px]">
-            <div className="flex sm:justify-between justify-end mr-[50px] relative">
+          <header className="bg-[#F9FAFB] md:py-[15px] px-[10px]">
+            <div className="flex items-center w-full">
               <Image
                 src={'/imgs/academix-logo-removebg.png'}
                 alt="img"
@@ -241,79 +237,84 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
                 height={100}
                 className="md:hidden"
               />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <div className="flex items-center sm:mr-[-45px] md:mr-0">
-                    <div className="absolute right-12">
-                      <Button
-                        onClick={() => setDropdownOpen(!dropdownOpen)}
-                        className="relative p-1 w-8 h-8 flex items-center justify-center bg-inherit hover:bg-gray-200"
-                      >
-                        <Bell color="#4B5563" className="scale-130" />
-                        {unreadCount > 0 && (
-                          <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />
-                        )}
-                      </Button>
+
+              <div className="flex items-center gap-3 ml-auto">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                      className="relative p-1 w-8 h-8 flex items-center justify-center bg-inherit hover:bg-gray-200"
+                    >
+                      <Bell color="#4B5563" className="scale-125" />
+                      {unreadCount > 0 && (
+                        <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent className="w-80 absolute right-0 top-full mt-2 max-h-60 overflow-auto shadow-lg rounded-md bg-white border border-gray-200 z-50">
+                    <div className="flex justify-between px-3 py-2">
+                      <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                      {notifications.length > 0 && (
+                        <DropdownMenuLabel
+                          className="cursor-pointer text-sm text-red-500"
+                          onClick={clearAll}
+                        >
+                          Tozalash
+                        </DropdownMenuLabel>
+                      )}
                     </div>
-                  </div>
-                </DropdownMenuTrigger>
 
-                <DropdownMenuContent className="w-80">
-                  <div className="flex justify-between px-[5px]">
-                    <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                    <div>
+                      {notifications.length === 0 ? (
+                        <p className="px-3 py-2 text-gray-500 text-sm">
+                          Xabarlar yo‘q
+                        </p>
+                      ) : (
+                        notifications.map((notf) => (
+                          <DropdownMenuItem
+                            key={notf._id}
+                            onClick={() =>
+                              handleRead(Number(notf.id), notf.type)
+                            }
+                            className={!notf.isRead ? 'bg-gray-100' : ''}
+                          >
+                            <div>
+                              <p className="font-semibold text-gray-800">
+                                {notf.title}
+                              </p>
+                              <p className="text-gray-600 text-sm">
+                                {notf.message}
+                              </p>
+                              <p className="text-gray-400 text-xs mt-1">
+                                {new Date(notf.createdAt).toLocaleDateString(
+                                  'uz-UZ',
+                                  {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric',
+                                  }
+                                )}
+                              </p>
+                            </div>
+                          </DropdownMenuItem>
+                        ))
+                      )}
+                    </div>
 
-                    {notifications.length === 0 ? (
-                      ''
-                    ) : (
-                      <DropdownMenuLabel
-                        className="cursor-pointer"
-                        onClick={clearAll}
-                      >
-                        Tozalash
-                      </DropdownMenuLabel>
+                    {unreadCount > 0 && (
+                      <div className="p-2 border-t text-center">
+                        <Button variant="outline" size="sm" onClick={readAll}>
+                          All read
+                        </Button>
+                      </div>
                     )}
-                  </div>
-                  <div className="max-h-60 overflow-auto">
-                    {notifications.map((notf, index) => (
-                      <DropdownMenuItem
-                        key={notf._id}
-                        onClick={() => handleRead(Number(notf.id), notf.type)}
-                        className={!notf.isRead ? 'bg-gray-100' : ''}
-                      >
-                        <div>
-                          <p className="font-semibold text-gray-800">
-                            {notf.title}
-                          </p>
-                          <p className="text-gray-600 text-sm">
-                            {notf.message}
-                          </p>
-                          <p className="text-gray-400 text-[12px] mt-1">
-                            {new Date(notf.createdAt).toLocaleDateString(
-                              'uz-UZ',
-                              {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric',
-                              }
-                            )}
-                          </p>
-                        </div>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                  {unreadCount > 0 && (
-                    <div className="p-2 border-t text-center">
-                      <Button variant="outline" size="sm" onClick={readAll}>
-                        All read
-                      </Button>
-                    </div>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <div className="absolute right-0 top-[-18px]">
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
                 <button
                   onClick={handleRemoveLogin}
-                  className="flex items-center gap-2 px-3 py-2 hover:bg-muted w-full text-left"
+                  className="flex items-center gap-2 px-3 py-2 hover:bg-muted"
                 >
                   <LogOut size={20} color="#4B5563" />
                 </button>

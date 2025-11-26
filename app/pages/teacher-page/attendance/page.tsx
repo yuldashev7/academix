@@ -31,7 +31,11 @@ const Attendance = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const teacherId = UseGetCookie('userId');
+        let teacherId = null;
+        if (typeof window !== 'undefined') {
+          teacherId = UseGetCookie('teacherId');
+        }
+
         const t = await GetTeacher();
         const c = await GetCourse();
         const s = await GetStudent();
@@ -41,12 +45,15 @@ const Attendance = () => {
         );
 
         setTeacher(
-          t.find((t: any) => String(t.id) === String(teacherId) || null)
+          t.find((t: teachersT) => String(t.id) === String(teacherId) || null)
         );
         setCourses(c);
         setStudent(filtredStudent);
 
-        const savedAttendance = localStorage.getItem('attendance');
+        let savedAttendance = null;
+        if (typeof window !== 'undefined') {
+          savedAttendance = localStorage.getItem('attendance');
+        }
         if (savedAttendance) {
           setAttendance(JSON.parse(savedAttendance));
         }
@@ -65,13 +72,20 @@ const Attendance = () => {
   };
 
   const handleSave = async () => {
-    localStorage.setItem('attendance', JSON.stringify(attendance));
+    setLoading(true);
+    try {
+      localStorage.setItem('attendance', JSON.stringify(attendance));
 
-    const presentStudents = student.filter((s) => attendance[s.id]);
+      const presentStudents = student.filter((s) => attendance[s.id]);
 
-    await Promise.all(presentStudents.map((s) => PostNotification(s.id)));
+      await Promise.all(presentStudents.map((s) => PostNotification(s.id)));
 
-    toast.success('Davomat saqlandi!');
+      toast.success('Davomat saqlandi!');
+    } catch (error) {
+      toast.error('Xatolik yuz berdi');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {

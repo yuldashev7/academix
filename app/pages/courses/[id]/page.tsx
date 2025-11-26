@@ -16,7 +16,7 @@ import GetTeacher from '@/app/api/teacher-api/get-teacher';
 import { FormatNumber } from '@/hooks/use-number-formetter';
 import { coureseT, groupT, teachersT } from '@/app/types/types';
 import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
-import { ArrowBigLeft, BackpackIcon, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 const AllPage = () => {
   const params = useParams();

@@ -38,7 +38,10 @@ export default function Student() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const teacherId = UseGetCookie('userId') ?? undefined;
+        let teacherId: string | null = null;
+        if (typeof window !== 'undefined') {
+          teacherId = UseGetCookie('userId') ?? null;
+        }
         console.log('teacherId', teacherId);
         const students = await GetStudent();
         console.log('Fetched students:', students);
