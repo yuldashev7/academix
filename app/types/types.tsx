@@ -89,7 +89,7 @@ export interface StudentModalT {
 
 export interface postStudentT {
   name: string;
-  lastName: string;
+  lastName?: string;
   email: string;
   password: string;
   phoneNumber: string;
