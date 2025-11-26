@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/table';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { ChevronLeft } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import GetGroup from '@/app/api/group-api/get-group';
@@ -16,7 +17,6 @@ import GetTeacher from '@/app/api/teacher-api/get-teacher';
 import { FormatNumber } from '@/hooks/use-number-formetter';
 import { coureseT, groupT, teachersT } from '@/app/types/types';
 import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
-import { ChevronLeft } from 'lucide-react';
 
 const AllPage = () => {
   const params = useParams();
