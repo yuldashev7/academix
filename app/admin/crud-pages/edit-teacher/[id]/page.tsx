@@ -40,6 +40,10 @@ const EditTeacherPage = () => {
       .string()
       .min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
 
+    lastName: z
+      .string()
+      .min(4, { message: "Familya kamida 4 ta belgi bo'lishi kerak" }),
+
     email: z
       .string()
       .min(5, { message: 'Email kiritish shart' })
@@ -61,6 +65,7 @@ const EditTeacherPage = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      lastName: '',
       email: '',
       phoneNumber: '',
       courseId: '',
@@ -77,6 +82,7 @@ const EditTeacherPage = () => {
 
         form.reset({
           name: data.name || '',
+          lastName: data.lastName || '',
           email: data.email || '',
           phoneNumber: data.phoneNumber || '',
           courseId: data.courseId || '',
@@ -135,6 +141,22 @@ const EditTeacherPage = () => {
                   <CustomeInput
                     label="Ism"
                     placeholder="Yangi ism kiriting"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <CustomeInput
+                    label="Familya"
+                    placeholder="Yangi familya kiriting"
                     {...field}
                   />
                 </FormControl>

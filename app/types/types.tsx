@@ -1,5 +1,6 @@
 export interface usersT {
   id: string;
+  lastName: string;
   role: 'super-admin' | 'admin' | 'teacher' | 'student';
   name: string;
   email: string;
@@ -24,11 +25,13 @@ export interface postAdminT {
   email: string;
   phoneNumber: string;
   role: string;
+  lastName: string;
 }
 
 export interface teachersT {
   id: string;
   name: string;
+  lastName: string;
   email: string;
   password: string;
   phoneNumber: string;
@@ -39,6 +42,7 @@ export interface teachersT {
 
 export interface postTeacherT {
   name: string;
+  lastName: string;
   email: string;
   password: string;
   phoneNumber: string;
@@ -59,6 +63,7 @@ export interface coureseT {
 export interface studentT {
   id: string;
   name: string;
+  lastName: string;
   email: string;
   password: string;
   phoneNumber: string;
@@ -84,6 +89,7 @@ export interface StudentModalT {
 
 export interface postStudentT {
   name: string;
+  lastName: string;
   email: string;
   password: string;
   phoneNumber: string;
@@ -149,4 +155,14 @@ export interface postHomeNotfT {
   title: string;
   message: string;
   deadline: string;
+}
+
+export interface mobilePaymentT {
+  student: studentT[];
+  course: coureseT[];
+}
+
+export interface contractsT {
+  id: number;
+  text: string;
 }

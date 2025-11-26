@@ -1,11 +1,5 @@
 'use client';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Bell, CreditCard, LogOut, Settings } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +12,13 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'sonner';
@@ -25,24 +26,21 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { notificationT } from '@/app/types/types';
-import {
-  Bell,
-  Clipboard,
-  FileText,
-  LogOut,
-  PenTool,
-  Settings,
-} from 'lucide-react';
+import HomeworkIcon from '@/public/icons/home-work-icon';
 import PatchHomeNotf from '@/app/api/home-work-notf/patch-home-notf';
 import GetStudentById from '@/app/api/student-api/get-student-by-id';
 import PatchNotification from '@/app/api/notification-api/patch-notification';
-import HomeworkIcon from '@/public/icons/home-work-icon';
 
 const sidebarItems = [
   {
     title: 'Uy ishi',
     href: '/pages/student-page/home-works',
     icon: HomeworkIcon,
+  },
+  {
+    title: "To'lovlarim",
+    href: '/pages/student-page/payments',
+    icon: CreditCard,
   },
   {
     title: 'Sozlamalar',
@@ -97,6 +95,10 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
         const davomat = await davomatRes.json();
         const uyIshi = await uyIshiRes.json();
 
+        const clearedId = JSON.parse(
+          localStorage.getItem('clearedNotificationIds') || '[]'
+        );
+
         setNotification(() => {
           const formatted = [
             ...davomat.map((n: any) => ({
@@ -109,7 +111,9 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
               _id: `H-${n.id}`,
               type: 'homework',
             })),
-          ];
+          ].filter((n) => !clearedId.includes(n._id));
+
+          setNotification(formatted);
 
           return formatted.sort(
             (a, b) =>
@@ -160,11 +164,29 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const clearAll = async () => {
+    try {
+      const clearedId = notifications.map((n) => n._id);
+      const prevCleared = JSON.parse(
+        localStorage.getItem('clearedNotificationIds') || '[]'
+      );
+
+      localStorage.setItem(
+        'clearedNotificationIds',
+        JSON.stringify([...prevCleared, ...clearedId])
+      );
+      setNotification([]);
+      toast.success("Xabarlar o'chirildi");
+    } catch (error) {
+      toast.error('Xatoli yuz berdi');
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full overflow-hidden">
-        <div className="w-[200px] flex-shrink-0 border-r bg-white">
-          <Sidebar className="w-[200px]">
+        <div className="w-[200px] border-r bg-white hidden md:block">
+          <Sidebar className="w-[200px]" collapsible="none">
             <SidebarHeader>
               <div className="text-lg text-gray-800 font-bold px-3 py-2 flex items-center gap-[20px] mt-[-15px]">
                 ACADEMIX
@@ -203,40 +225,54 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 
             <SidebarFooter>
               <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <button
-                      onClick={handleRemoveLogin}
-                      className="flex items-center gap-2 px-3 py-2 hover:bg-muted w-full text-left"
-                    >
-                      <LogOut size={20} />
-                      <span>Chiqish</span>
-                    </button>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarMenuItem></SidebarMenuItem>
               </SidebarMenu>
             </SidebarFooter>
           </Sidebar>
         </div>
 
         <div className="flex-1 flex flex-col">
-          <header className="bg-[#F9FAFB] py-[15px] px-[10px]">
-            <div className="flex justify-end mr-[50px] relative">
+          <header className="bg-[#F9FAFB] md:py-[34px] px-[10px]">
+            <div className="flex sm:justify-between justify-end mr-[50px] relative">
+              <Image
+                src={'/imgs/academix-logo-removebg.png'}
+                alt="img"
+                width={140}
+                height={100}
+                className="md:hidden"
+              />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="relative p-1 w-8 h-8 flex items-center justify-center bg-inherit hover:bg-gray-200"
-                  >
-                    <Bell color="#4B5563" className="scale-130" />
-                    {unreadCount > 0 && (
-                      <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />
-                    )}
-                  </Button>
+                  <div className="flex items-center sm:mr-[-45px] md:mr-0">
+                    <div className="absolute right-12">
+                      <Button
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                        className="relative p-1 w-8 h-8 flex items-center justify-center bg-inherit hover:bg-gray-200"
+                      >
+                        <Bell color="#4B5563" className="scale-130" />
+                        {unreadCount > 0 && (
+                          <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent className="w-80">
-                  <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                  <div className="flex justify-between px-[5px]">
+                    <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+
+                    {notifications.length === 0 ? (
+                      ''
+                    ) : (
+                      <DropdownMenuLabel
+                        className="cursor-pointer"
+                        onClick={clearAll}
+                      >
+                        Tozalash
+                      </DropdownMenuLabel>
+                    )}
+                  </div>
                   <div className="max-h-60 overflow-auto">
                     {notifications.map((notf, index) => (
                       <DropdownMenuItem
@@ -274,6 +310,14 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
+              <div className="absolute right-0 top-[-18px]">
+                <button
+                  onClick={handleRemoveLogin}
+                  className="flex items-center gap-2 px-3 py-2 hover:bg-muted w-full text-left"
+                >
+                  <LogOut size={20} color="#4B5563" />
+                </button>
+              </div>
             </div>
           </header>
 

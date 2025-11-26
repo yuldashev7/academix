@@ -19,6 +19,10 @@ const TeacherProfile = () => {
       .string()
       .min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
 
+    lastName: z
+      .string()
+      .min(4, { message: "Familya kamida 4 ta belgi bo'lishi kerak" }),
+
     email: z
       .string()
       .min(5, { message: 'Email kiritish shart' })
@@ -40,6 +44,7 @@ const TeacherProfile = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      lastName: '',
       email: '',
       password: '',
       phoneNumber: '',
@@ -53,6 +58,7 @@ const TeacherProfile = () => {
         if (data && data[0]) {
           form.reset({
             name: data[0]?.name || '',
+            lastName: data[0]?.lastName || '',
             email: data[0]?.email || '',
             password: data[0]?.password || '',
             phoneNumber: data[0]?.phoneNumber || '',
@@ -87,6 +93,23 @@ const TeacherProfile = () => {
                   <CustomeInput
                     label="Ism"
                     placeholder="Ism"
+                    {...field}
+                    readOnly
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <CustomeInput
+                    label="Familya"
+                    placeholder="Familya"
                     {...field}
                     readOnly
                   />

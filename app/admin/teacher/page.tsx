@@ -101,6 +101,7 @@ const Teacher = () => {
             <TableRow>
               <TableHead>Id</TableHead>
               <TableHead>Ism</TableHead>
+              <TableHead>Familya</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Telefon Raqam</TableHead>
               <TableHead>Yaratilgan sana</TableHead>
@@ -113,6 +114,7 @@ const Teacher = () => {
               <TableRow key={item.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.name}</TableCell>
+                <TableCell>{item.lastName}</TableCell>
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.phoneNumber}</TableCell>
                 <TableCell>{formatData(item.createdAt)}</TableCell>

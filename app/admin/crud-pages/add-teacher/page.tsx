@@ -33,6 +33,10 @@ import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
 const formSchema = z.object({
   name: z.string().min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
 
+  lastName: z
+    .string()
+    .min(4, { message: "Familya kamida 4 ta belgi bo'lishi kerak" }),
+
   email: z
     .string()
     .min(5, { message: 'Email kiritish shart' })
@@ -61,6 +65,7 @@ const AddTeacher = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      lastName: '',
       email: '',
       password: '',
       phoneNumber: '',
@@ -119,6 +124,23 @@ const AddTeacher = () => {
                       <CustomeInput
                         label="Ism"
                         placeholder="Ism kiriting"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <CustomeInput
+                        label="Familya"
+                        placeholder="Familya kiriting"
                         {...field}
                       />
                     </FormControl>

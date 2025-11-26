@@ -45,6 +45,10 @@ const AddStudent = () => {
       .string()
       .min(4, { message: "Ism kamida 4 ta belgi bo'lishi kerak" }),
 
+    lastName: z
+      .string()
+      .min(4, { message: "Familya kamida 4 ta belgi bo'lishi kerak" }),
+
     email: z
       .string()
       .min(5, { message: 'Email kiritish shart' })
@@ -77,6 +81,7 @@ const AddStudent = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      lastName: '',
       email: '',
       password: '',
       phoneNumber: '',
@@ -155,6 +160,22 @@ const AddStudent = () => {
                   <CustomeInput
                     label="Ism"
                     placeholder="Ism kiriting"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <CustomeInput
+                    label="Familya"
+                    placeholder="Familya kiriting"
                     {...field}
                   />
                 </FormControl>

@@ -87,6 +87,7 @@ const CustomeTable = () => {
             <TableRow>
               <TableHead className="pl-[20px]">Id</TableHead>
               <TableHead>Ism</TableHead>
+              <TableHead>Familya</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Telefon Raqam</TableHead>
               <TableHead>Yaratilgan sana</TableHead>
@@ -100,6 +101,7 @@ const CustomeTable = () => {
                   {index + 1}
                 </TableCell>
                 <TableCell className="w-[80px]">{item.name}</TableCell>
+                <TableCell className="w-[80px]">{item.lastName}</TableCell>
                 <TableCell className="w-[80px]">{item.email}</TableCell>
                 <TableCell className="w-[80px]">{item.phoneNumber}</TableCell>
                 <TableCell className="w-[80px]">

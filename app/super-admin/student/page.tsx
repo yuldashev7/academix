@@ -142,8 +142,9 @@ export default function Student() {
           <Table className="text-sm">
             <TableHeader>
               <TableRow>
-                <TableHead className="text-center w-[50px]">ID</TableHead>
+                <TableHead className="text-center w-[50px]">Id</TableHead>
                 <TableHead className="text-center">Ism</TableHead>
+                <TableHead className="text-center">Familya</TableHead>
                 <TableHead className="text-center">Email</TableHead>
                 <TableHead className="text-center">Telefon</TableHead>
                 <TableHead className="text-center">Sana</TableHead>
@@ -161,6 +162,7 @@ export default function Student() {
                 <TableRow key={item.id}>
                   <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell className="text-center">{item.name}</TableCell>
+                  <TableCell className="text-center">{item.lastName}</TableCell>
                   <TableCell className="text-center">{item.email}</TableCell>
                   <TableCell className="text-center">
                     {item.phoneNumber}

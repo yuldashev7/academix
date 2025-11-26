@@ -90,8 +90,9 @@ const Attendance = () => {
       <Table className="w-full border rounded-md mt-6">
         <TableHeader className="bg-gray-100">
           <TableRow>
-            <TableHead className="w-[80px] text-left px-4">Id</TableHead>
-            <TableHead className="w-[300px] text-left px-4">Ism</TableHead>
+            <TableHead className="text-left px-4">Id</TableHead>
+            <TableHead className="text-left px-2">Ism</TableHead>
+            <TableHead className="px-2">Familya</TableHead>
             <TableHead className="text-right px-4 pr-[40px]">
               Yo'qlama
             </TableHead>
@@ -101,7 +102,8 @@ const Attendance = () => {
           {student.map((item, index) => (
             <TableRow key={item.id} className="hover:bg-gray-50">
               <TableCell className="px-4 py-2">{index + 1}</TableCell>
-              <TableCell className="px-4 py-2">{item.name}</TableCell>
+              <TableCell className="px-2 py-2">{item.name}</TableCell>
+              <TableCell className="px-2 py-2">{item.lastName}</TableCell>
               <TableCell className="px-4 py-2 pr-[50px] text-right">
                 <Switch
                   checked={!!attendance[item.id]}

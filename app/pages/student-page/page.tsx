@@ -1,7 +1,11 @@
+import HomeWorks from './home-works/page';
+
 const StudentPage = () => {
   return (
     <div>
-      <div>lorem</div>
+      <div>
+        <HomeWorks />
+      </div>
     </div>
   );
 };

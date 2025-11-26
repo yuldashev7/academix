@@ -11,12 +11,12 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import BackIcon from '@/public/icons/back-icon';
 import GetGroup from '@/app/api/group-api/get-group';
 import GetTeacher from '@/app/api/teacher-api/get-teacher';
 import { FormatNumber } from '@/hooks/use-number-formetter';
 import { coureseT, groupT, teachersT } from '@/app/types/types';
 import { GetCourse } from '@/app/super-admin/crud-pages/get-course/get-course';
+import { ArrowBigLeft, BackpackIcon, ChevronLeft } from 'lucide-react';
 
 const AllPage = () => {
   const params = useParams();
@@ -109,7 +109,7 @@ const AllPage = () => {
           href={'/admin/all-courses'}
           className="text-gray-700 font-medium flex items-center justify-center gap-[2px]"
         >
-          <BackIcon />
+          <ChevronLeft className="mt-[2px]" />
           Ortga Qaytish
         </Link>
       </div>
