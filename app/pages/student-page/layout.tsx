@@ -74,6 +74,7 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
         if (id) setStudentId(id);
         if (user.groupId) setStudentGroupId(String(user.groupId));
       }
+      setMounted(true);
     };
 
     loadStudent();
